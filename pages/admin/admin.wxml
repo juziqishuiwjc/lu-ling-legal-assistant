@@ -1,0 +1,122 @@
+<!--pages/admin/admin.wxml-->
+<view class="container">
+  <!-- 管理员头部 -->
+  <view class="header">
+    <text class="title">👨‍⚖️ 管理后台</text>
+    <text class="subtitle">王吉成律师 - 用户激活管理</text>
+  </view>
+
+  <!-- 激活用户 -->
+  <view class="card">
+    <text class="card-title">✨ 激活付费用户</text>
+    <view class="input-group">
+      <text class="input-label">用户手机号后8位</text>
+      <input
+        class="input-field"
+        type="number"
+        maxlength="8"
+        placeholder="请输入8位数字"
+        value="{{phoneInput}}"
+        bindinput="onPhoneInput"
+      />
+    </view>
+    <view class="input-group">
+      <text class="input-label">套餐类型</text>
+      <view class="plan-selector">
+        <view class="plan-option {{selectedPlan === 'trial' ? 'active' : ''}}" bindtap="selectPlan" data-plan="trial">
+          <text class="plan-name">试用</text>
+          <text class="plan-price">按天计算</text>
+        </view>
+        <view class="plan-option {{selectedPlan === 'monthly' ? 'active' : ''}}" bindtap="selectPlan" data-plan="monthly">
+          <text class="plan-name">月付</text>
+          <text class="plan-price">¥99/月</text>
+        </view>
+        <view class="plan-option {{selectedPlan === 'yearly' ? 'active' : ''}}" bindtap="selectPlan" data-plan="yearly">
+          <text class="plan-name">年付</text>
+          <text class="plan-price">¥996/年</text>
+        </view>
+      </view>
+    </view>
+    <!-- 试用天数输入（仅在选择试用套餐时显示） -->
+    <view class="input-group" wx:if="{{selectedPlan === 'trial'}}">
+      <text class="input-label">试用天数</text>
+      <input
+        class="input-field"
+        type="number"
+        placeholder="请输入试用天数（如：7）"
+        value="{{trialDays}}"
+        bindinput="onTrialDaysInput"
+      />
+    </view>
+    <button class="activate-button" bindtap="activateUser" disabled="{{!phoneInput}}">
+      确认激活
+    </button>
+  </view>
+
+  <!-- 已激活用户列表 -->
+  <view class="card">
+    <text class="card-title">👥 已激活用户</text>
+    <view class="search-box">
+      <input
+        class="search-input"
+        placeholder="搜索手机号"
+        value="{{searchKeyword}}"
+        bindinput="onSearchInput"
+      />
+    </view>
+    <scroll-view scroll-y class="user-list" wx:if="{{filteredUsers.length > 0}}">
+      <view class="user-item" wx:for="{{filteredUsers}}" wx:key="phone" bindtap="showUserInfo" data-user="{{item}}">
+        <view class="user-info-row">
+          <text class="user-phone">手机号后8位：****{{item.phone}}</text>
+          <view class="user-plan {{item.planType === 'yearly' ? 'yearly' : item.planType === 'trial' ? 'trial' : 'monthly'}}">
+            <text class="plan-text">{{item.planType === 'yearly' ? '年付' : item.planType === 'trial' ? '试用' : '月付'}}</text>
+          </view>
+        </view>
+        <view class="user-meta">
+          <text class="meta-text">激活时间：{{item.activateTime}}</text>
+        </view>
+        <view class="user-meta">
+          <text class="meta-text">到期时间：{{item.expireDate}}</text>
+        </view>
+        <view class="user-meta">
+          <text class="meta-text {{item.isExpired ? 'expired' : ''}}">剩余时间：{{item.remainingDays}}</text>
+        </view>
+        <view class="tap-hint">
+          <text class="hint-text">点击查看详情</text>
+        </view>
+      </view>
+    </scroll-view>
+    <view class="empty-state" wx:else>
+      <text class="empty-text">暂无已激活用户</text>
+    </view>
+  </view>
+
+  <!-- 统计信息 -->
+  <view class="card stats-card">
+    <text class="card-title">📊 数据统计</text>
+    <view class="stat-row">
+      <view class="stat-box">
+        <text class="stat-number">{{totalUsers}}</text>
+        <text class="stat-label">总用户数</text>
+      </view>
+      <view class="stat-box">
+        <text class="stat-number">{{paidUsers}}</text>
+        <text class="stat-label">付费用户</text>
+      </view>
+      <view class="stat-box">
+        <text class="stat-number">{{yearlyUsers}}</text>
+        <text class="stat-label">年付用户</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 导航链接 -->
+  <view class="nav-links">
+    <button class="nav-button" bindtap="goToIndex">返回首页</button>
+  </view>
+
+  <!-- 版权信息 -->
+  <view class="copyright-footer">
+    <text class="copyright-text">© 2025 王吉成律师 版权所有</text>
+  </view>
+</view>

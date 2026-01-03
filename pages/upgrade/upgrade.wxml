@@ -1,0 +1,112 @@
+<!--pages/upgrade/upgrade.wxml-->
+<view class="container">
+  <view class="header">
+    <image class="logo" src="https://i.ibb.co/HfcLSTct/assistant-avatar.png" mode="aspectFit"></image>
+    <text class="title">升级会员</text>
+    <text class="subtitle">解锁无限次法律咨询</text>
+  </view>
+
+  <view class="content">
+    <!-- 温馨提示 -->
+    <view class="notice-card">
+      <text class="notice-title">💡 温馨提示</text>
+      <text class="notice-text">由于微信个人小程序限制，暂不支持在线支付。如需开通会员，请联系王吉成律师。</text>
+    </view>
+
+    <!-- 开通流程说明 -->
+    <view class="notice-card">
+      <text class="notice-title">📝 开通流程</text>
+      <text class="notice-text">1. 在「我的」页面设置手机号后8位</text>
+      <text class="notice-text">2. 点击下方按钮联系王吉成律师</text>
+      <text class="notice-text">3. 转账相应金额</text>
+      <text class="notice-text">4. 备注：手机号后8位</text>
+      <text class="notice-text">5. 5分钟内激活会员</text>
+    </view>
+
+    <!-- 免费版说明 -->
+    <view class="card free-card">
+      <view class="card-header">
+        <text class="card-title">免费版</text>
+        <text class="card-price">¥0/月</text>
+      </view>
+      <view class="card-body">
+        <view class="feature">
+          <text class="feature-icon">✓</text>
+          <text class="feature-text">每天 5 次咨询</text>
+        </view>
+        <view class="feature">
+          <text class="feature-icon">✓</text>
+          <text class="feature-text">基础法律问答</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 付费版说明 -->
+    <view class="card paid-card">
+      <view class="card-badge">推荐</view>
+      <view class="card-header">
+        <text class="card-title">专业版</text>
+        <text class="card-price">¥99/月</text>
+      </view>
+      <view class="card-body">
+        <view class="feature">
+          <text class="feature-icon">✓</text>
+          <text class="feature-text">无限次咨询</text>
+        </view>
+        <view class="feature">
+          <text class="feature-icon">✓</text>
+          <text class="feature-text">高级法律分析</text>
+        </view>
+        <view class="feature">
+          <text class="feature-icon">✓</text>
+          <text class="feature-text">优先响应</text>
+        </view>
+      </view>
+      <button class="pay-button" bindtap="contactLawyer">
+        联系王吉成律师开通
+      </button>
+    </view>
+
+    <!-- 年付优惠 -->
+    <view class="card yearly-card">
+      <view class="card-badge">省¥192</view>
+      <view class="card-header">
+        <text class="card-title">年付优惠</text>
+        <text class="card-price">¥996/年</text>
+      </view>
+      <view class="card-subtitle">原价¥1188，年付仅¥83/月</view>
+      <button class="pay-button secondary" bindtap="contactLawyerYearly">
+        联系王吉成律师开通
+      </button>
+    </view>
+
+    <!-- 联系方式 -->
+    <view class="contact-card">
+      <text class="contact-title">📞 联系方式</text>
+      <view class="contact-item" bindtap="copyWechat">
+        <text class="contact-label">微信号：</text>
+        <text class="contact-value">lawyer_wang_zz</text>
+        <text class="copy-hint">（点击复制）</text>
+      </view>
+      <text class="contact-note">开通流程：</text>
+      <text class="contact-step">1. 添加微信：lawyer_wang_zz</text>
+      <text class="contact-step">2. 转账相应金额（月付¥99 或年付¥996）</text>
+      <text class="contact-step">3. 备注：您的手机号后8位</text>
+      <text class="contact-step">4. 确认后5分钟内开通会员</text>
+    </view>
+
+    <!-- 说明文字 -->
+    <view class="notes">
+      <text class="note-title">服务说明：</text>
+      <text class="note-text">• 开通后立即生效，无限制使用</text>
+      <text class="note-text">• 支持微信转账</text>
+      <text class="note-text">• 遇到问题请联系王吉成律师</text>
+      <text class="note-text">• 工作时间内快速响应</text>
+    </view>
+
+    <!-- 版权信息 -->
+    <view class="copyright-footer">
+      <text class="copyright-text">© 2025 王吉成律师 版权所有</text>
+    </view>
+  </view>
+</view>

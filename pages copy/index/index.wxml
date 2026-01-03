@@ -1,0 +1,98 @@
+<!--pages/index/index.wxml-->
+<view class="container">
+  <!-- 顶部导航 -->
+  <view class="top-nav">
+    <text class="nav-title">庐陵吉成法答</text>
+    <view class="nav-right" bindtap="goToUserCenter">
+      <text class="nav-icon">👤</text>
+      <text class="nav-text">我的</text>
+    </view>
+  </view>
+
+  <!-- 聊天消息区域 -->
+  <scroll-view
+    class="chat-area"
+    scroll-y
+    scroll-into-view="{{scrollToView}}"
+    scroll-with-animation>
+
+    <!-- 欢迎消息 -->
+    <view class="message-row assistant-row" wx:if="{{messages.length === 0}}">
+      <view class="message-content assistant-message welcome-message">
+        <text class="message-text">您好！我是王吉成律师的AI助手 👋
+
+专业解答：劳动纠纷、合同审查、婚姻家庭、民事纠纷等法律问题
+
+今日剩余次数：{{remainingCount}}次
+
+请问有什么可以帮您的？
+        </text>
+      </view>
+    </view>
+
+    <!-- 消息列表 -->
+    <block wx:for="{{messages}}" wx:key="id">
+      <!-- 用户消息 -->
+      <view class="message-row user-row" id="msg-{{item.id}}" wx:if="{{item.role === 'user'}}">
+        <view class="message-content user-message">
+          <text class="message-text">{{item.content}}</text>
+        </view>
+        <image class="avatar user-avatar" src="{{userAvatar || 'https://i.ibb.co/kYn16mr/user-avatar.png'}}" mode="aspectFill"></image>
+      </view>
+
+      <!-- 助手消息 -->
+      <view class="message-row assistant-row" id="msg-{{item.id}}" wx:else>
+        <image class="avatar assistant-avatar" src="https://i.ibb.co/HfcLSTct/assistant-avatar.png" mode="aspectFit"></image>
+        <view class="message-content assistant-message">
+          <text class="message-text">{{item.content}}</text>
+        </view>
+      </view>
+    </block>
+
+    <!-- 加载提示 -->
+    <view class="message-row assistant-row" wx:if="{{loading}}">
+      <image class="avatar assistant-avatar" src="https://i.ibb.co/HfcLSTct/assistant-avatar.png" mode="aspectFit"></image>
+      <view class="message-content assistant-message loading">
+        <view class="typing-dots">
+          <view class="dot"></view>
+          <view class="dot"></view>
+          <view class="dot"></view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 打字光标效果 -->
+    <view class="message-row assistant-row" wx:if="{{messages.length > 0 && messages[messages.length-1].isTyping}}">
+      <image class="avatar assistant-avatar" src="https://i.ibb.co/HfcLSTct/assistant-avatar.png" mode="aspectFit"></image>
+      <view class="message-content assistant-message">
+        <text class="message-text">{{messages[messages.length-1].content}}<text class="cursor">|</text></text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 输入区域 -->
+  <view class="input-area">
+    <view class="input-box">
+      <textarea
+        class="input-field"
+        value="{{inputText}}"
+        bindinput="onInputChange"
+        bindconfirm="sendMessage"
+        confirm-type="send"
+        placeholder="请输入您的法律问题..."
+        placeholder-class="input-placeholder"
+        auto-height
+        maxlength="1000"
+        adjust-position="{{true}}"
+        show-confirm-bar="{{false}}"
+      />
+      <button
+        class="send-button {{hasInput ? 'active' : ''}}"
+        bindtap="sendMessage"
+        disabled="{{!hasInput || loading}}"
+      >
+        发送
+      </button>
+    </view>
+  </view>
+</view>
