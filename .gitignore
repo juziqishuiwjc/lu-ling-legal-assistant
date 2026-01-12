@@ -1,8 +1,8 @@
 # 微信小程序编译产物
 miniprogram_npm/
 
-# 项目配置（包含敏感信息）
-project.config.json
+# 项目私有配置（包含敏感信息）
+project.private.config.json
 
 # 日志文件
 *.log

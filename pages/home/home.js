@@ -146,15 +146,6 @@ Page({
   },
 
   /**
-   * 跳转到用户中心
-   */
-  goToUserCenter() {
-    wx.navigateTo({
-      url: '/pages/user-center/user-center'
-    })
-  },
-
-  /**
    * 处理功能模块点击
    */
   handleFunctionTap(e) {
