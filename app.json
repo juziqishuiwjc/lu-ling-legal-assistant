@@ -1,9 +1,29 @@
 {
   "pages": [
+    "pages/home/home",
     "pages/index/index",
+    "pages/litigation-cost/litigation-cost",
+    "pages/delay-interest/delay-interest",
+    "pages/loan-interest/loan-interest",
+    "pages/lpr-query/lpr-query",
+    "pages/date-calc/date-calc",
+    "pages/work-injury/work-injury",
+    "pages/compensation/compensation",
+    "pages/lawyer-fee/lawyer-fee",
+    "pages/annual-leave/annual-leave",
+    "pages/small-claim/small-claim",
+    "pages/jurisdiction/jurisdiction",
+    "pages/retirement-age/retirement-age",
+    "pages/legal-data/legal-data",
+    "pages/arbitration-fee/arbitration-fee",
+    "pages/interest-penalty/interest-penalty",
+    "pages/traffic-accident/traffic-accident",
+    "pages/bankruptcy-fee/bankruptcy-fee",
+    "pages/civil-cause/civil-cause",
     "pages/upgrade/upgrade",
     "pages/user-center/user-center",
-    "pages/admin/admin"
+    "pages/admin/admin",
+    "pages/webview/webview"
   ],
   "window": {
     "backgroundTextStyle": "light",

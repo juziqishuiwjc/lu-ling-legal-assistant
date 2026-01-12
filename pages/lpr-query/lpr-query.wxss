@@ -1,0 +1,280 @@
+/* pages/lpr-query/lpr-query.wxss */
+.container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f0f4ff 0%, #f5f5f5 100%);
+  padding: 30rpx 20rpx;
+  padding-bottom: calc(30rpx + env(safe-area-inset-bottom));
+}
+
+/* 页面标题 */
+.page-header {
+  text-align: center;
+  margin-bottom: 40rpx;
+}
+
+.page-title {
+  display: block;
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 12rpx;
+}
+
+.page-subtitle {
+  display: block;
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 当前LPR卡片 */
+.current-lpr-card {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
+}
+
+.current-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.current-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.update-date {
+  font-size: 22rpx;
+  color: #999;
+}
+
+.lpr-grid {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 30rpx 0;
+  background: linear-gradient(135deg, rgba(74, 144, 226, 0.1) 0%, rgba(53, 122, 189, 0.1) 100%);
+  border-radius: 16rpx;
+  margin-bottom: 20rpx;
+}
+
+.lpr-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12rpx;
+  flex: 1;
+}
+
+.lpr-label {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.lpr-value {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #4A90E2;
+}
+
+.lpr-divider {
+  width: 1rpx;
+  height: 80rpx;
+  background: #e8ecef;
+}
+
+.lpr-tips {
+  padding: 16rpx 20rpx;
+  background: linear-gradient(135deg, rgba(67, 233, 123, 0.1) 0%, rgba(56, 249, 215, 0.1) 100%);
+  border-radius: 12rpx;
+}
+
+.tips-text {
+  font-size: 22rpx;
+  color: #38f9d7;
+  line-height: 1.6;
+}
+
+/* 筛选器 */
+.filter-section {
+  background: white;
+  border-radius: 20rpx;
+  padding: 24rpx 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
+}
+
+.filter-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filter-label {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.filter-picker {
+  flex: 1;
+  margin-left: 20rpx;
+}
+
+.picker-view {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12rpx;
+  padding: 16rpx 24rpx;
+  background: #f8faff;
+  border: 2rpx solid #e8f0ff;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  color: #4A90E2;
+}
+
+.picker-arrow {
+  font-size: 20rpx;
+  color: #999;
+}
+
+/* 历史数据列表 */
+.history-section {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
+}
+
+.history-header {
+  margin-bottom: 20rpx;
+}
+
+.history-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rpx;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.history-item:last-child {
+  border-bottom: none;
+}
+
+.item-left {
+  flex: 1;
+}
+
+.item-date {
+  font-size: 26rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.item-right {
+  display: flex;
+  gap: 30rpx;
+}
+
+.rate-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6rpx;
+}
+
+.rate-label {
+  font-size: 20rpx;
+  color: #999;
+}
+
+.rate-value {
+  font-size: 28rpx;
+  color: #666;
+  font-weight: 500;
+}
+
+.rate-value.changed {
+  color: #ff6b6b;
+  font-weight: bold;
+}
+
+/* 知识科普卡片 */
+.knowledge-card {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
+}
+
+.knowledge-header {
+  margin-bottom: 20rpx;
+}
+
+.knowledge-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.knowledge-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.knowledge-text {
+  font-size: 24rpx;
+  color: #666;
+  line-height: 1.8;
+  text-align: justify;
+}
+
+.knowledge-subtitle {
+  font-size: 26rpx;
+  color: #333;
+  font-weight: 500;
+  margin-top: 8rpx;
+}
+
+.knowledge-divider {
+  height: 1rpx;
+  background: #e8ecef;
+  margin: 12rpx 0;
+}
+
+/* 免责声明 */
+.disclaimer {
+  padding: 20rpx;
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(238, 90, 111, 0.1) 100%);
+  border-radius: 12rpx;
+  border: 1rpx solid #ff6b6b;
+}
+
+.disclaimer-text {
+  font-size: 22rpx;
+  color: #ee5a6f;
+  line-height: 1.6;
+  text-align: center;
+}

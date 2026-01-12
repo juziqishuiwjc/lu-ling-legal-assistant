@@ -1,0 +1,121 @@
+/* pages/home/home.wxss */
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: linear-gradient(180deg, #f0f4ff 0%, #f5f5f5 100%);
+}
+
+/* 顶部导航 */
+.top-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20rpx 30rpx;
+  background: white;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.nav-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 12rpx 24rpx;
+  background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+  border-radius: 30rpx;
+  box-shadow: 0 2rpx 8rpx rgba(74, 144, 226, 0.3);
+}
+
+.nav-icon {
+  font-size: 28rpx;
+}
+
+.nav-text {
+  font-size: 28rpx;
+  color: white;
+  font-weight: bold;
+}
+
+/* 主内容区域 */
+.main-content {
+  flex: 1;
+  padding: 30rpx 20rpx;
+  overflow-y: auto;
+}
+
+/* 功能模块网格 */
+.function-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24rpx 20rpx;
+  padding-bottom: 40rpx;
+}
+
+.function-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx 10rpx;
+  background: white;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+  transition: all 0.3s;
+}
+
+.function-item:active {
+  transform: scale(0.95);
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
+}
+
+/* 功能图标容器 */
+.function-icon-wrapper {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
+}
+
+.function-icon {
+  font-size: 48rpx;
+}
+
+/* 功能名称 */
+.function-name {
+  font-size: 22rpx;
+  color: #333;
+  text-align: center;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+}
+
+/* 版权信息 */
+.copyright-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30rpx 20rpx;
+  padding-bottom: calc(30rpx + env(safe-area-inset-bottom));
+  background: white;
+  border-top: 1rpx solid #e8ecef;
+}
+
+.copyright-footer .copyright-text {
+  font-size: 22rpx;
+  color: #999;
+  text-align: center;
+}

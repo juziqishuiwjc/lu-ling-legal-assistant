@@ -1,0 +1,114 @@
+<!--pages/small-claim/small-claim.wxml-->
+<view class="container">
+  <!-- 标题 -->
+  <view class="page-header">
+    <text class="page-title">小额诉讼案件限额</text>
+    <text class="page-subtitle">各省、自治区、直辖市小额诉讼标的额标准</text>
+  </view>
+
+  <!-- 筛选器 -->
+  <view class="filter-section">
+    <view class="filter-item">
+      <text class="filter-label">地区</text>
+      <picker class="filter-picker" mode="selector" range="{{provinces}}" bindchange="onProvinceChange">
+        <view class="picker-view">
+          <text>{{provinces[selectedProvince]}}</text>
+          <text class="picker-arrow">▼</text>
+        </view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 当前标准展示 -->
+  <view class="current-card">
+    <view class="current-header">
+      <text class="current-title">{{provinces[selectedProvince]}}</text>
+    </view>
+    <view class="current-content">
+      <view class="amount-display">
+        <text class="amount-label">小额诉讼标的额上限</text>
+        <text class="amount-value">{{limitData.limit}}</text>
+      </view>
+      <view class="update-info">
+        <text class="update-text">📅 执行时间：{{limitData.effectiveDate}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 法律依据 -->
+  <view class="law-card">
+    <view class="law-header">
+      <text class="law-title">📜 法律依据</text>
+    </view>
+    <view class="law-content">
+      <text class="law-text">《民事诉讼法》第165条：</text>
+      <text class="law-text">基层人民法院和它派出的法庭审理事实清楚、权利义务关系明确、争议不大的简单的民事案件，适用本章规定。</text>
+      <text class="law-text">基层人民法院和它派出的法庭审理前款规定的民事案件，认为事实清楚、权利义务关系明确、争议不大的，可以适用普通程序独任制审理。</text>
+      <view class="law-divider"></view>
+      <text class="law-text">小额诉讼案件的标的额标准为各省、自治区、直辖市上年度就业人员年平均工资的百分之三十以下。</text>
+    </view>
+  </view>
+
+  <!-- 小额诉讼特点 -->
+  <view class="features-card">
+    <view class="features-header">
+      <text class="features-title">⚡ 小额诉讼程序特点</text>
+    </view>
+    <view class="features-content">
+      <view class="feature-item">
+        <text class="feature-icon">✓</text>
+        <view class="feature-info">
+          <text class="feature-title">一审终审</text>
+          <text class="feature-desc">判决一经作出即生效，不得上诉</text>
+        </view>
+      </view>
+      <view class="feature-item">
+        <text class="feature-icon">✓</text>
+        <view class="feature-info">
+          <text class="feature-title">简化审理</text>
+          <text class="feature-desc">简化起诉手续，简便传唤方式</text>
+        </view>
+      </view>
+      <view class="feature-item">
+        <text class="feature-icon">✓</text>
+        <view class="feature-info">
+          <text class="feature-title">缩短审限</text>
+          <text class="feature-desc">一般应当在立案之日起一个月内审结</text>
+        </view>
+      </view>
+      <view class="feature-item">
+        <text class="feature-icon">✓</text>
+        <view class="feature-info">
+          <text class="feature-title">当庭宣判</text>
+          <text class="feature-desc">原则上当庭宣判，当庭送达判决书</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 全部地区列表 -->
+  <view class="list-section">
+    <view class="list-header">
+      <text class="list-title">📋 各地区限额标准</text>
+    </view>
+
+    <view class="province-list">
+      <block wx:for="{{limitList}}" wx:key="id">
+        <view class="province-item">
+          <view class="province-left">
+            <text class="province-name">{{item.province}}</text>
+          </view>
+          <view class="province-right">
+            <text class="province-limit">{{item.limit}}</text>
+            <text class="province-date">{{item.effectiveDate}}</text>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 免责声明 -->
+  <view class="disclaimer">
+    <text class="disclaimer-text">⚠️ 标的额标准每年可能调整，具体以法院公布为准</text>
+  </view>
+</view>

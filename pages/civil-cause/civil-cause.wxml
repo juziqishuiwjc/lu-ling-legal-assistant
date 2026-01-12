@@ -1,0 +1,130 @@
+<!--pages/civil-cause/civil-cause.wxml-->
+<view class="container">
+  <!-- 标题区域 -->
+  <view class="header">
+    <view class="nav-back" bindtap="goBack">
+      <text class="back-icon">‹</text>
+      <text class="back-text">返回</text>
+    </view>
+    <text class="nav-title">民事案由查询</text>
+  </view>
+
+  <!-- 提示卡片 -->
+  <view class="tips-card">
+    <text class="tips-title">💡 查询说明</text>
+    <text class="tips-text">根据2025年12月17日发布的最新《民事案件案由规定》（法〔2025〕226号）检索，2026年1月1日起施行，共收录12个一级案由、1,055个案由</text>
+  </view>
+
+  <!-- 搜索框 -->
+  <view class="search-section">
+    <view class="search-box">
+      <input class="search-input" placeholder="搜索案由关键词" value="{{searchKeyword}}" bindinput="onSearchInput" />
+      <text class="search-icon">🔍</text>
+    </view>
+  </view>
+
+  <!-- 案由分类Tab -->
+  <view class="tab-container">
+    <scroll-view class="tab-scroll" scroll-x>
+      <view class="tab-item {{activeTab === index ? 'active' : ''}}" wx:for="{{categories}}" wx:key="index" bindtap="selectTab" data-index="{{index}}">
+        <text class="tab-text">{{item.name}}</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 案由列表 -->
+  <view class="cause-list">
+    <view class="cause-item" wx:for="{{filteredCauses}}" wx:key="id" bindtap="showCauseDetail" data-cause="{{item}}">
+      <view class="cause-header">
+        <text class="cause-name">{{item.name}}</text>
+        <text class="cause-code">{{item.code}}</text>
+      </view>
+      <text class="cause-desc" wx:if="{{item.desc}}">{{item.desc}}</text>
+      <view class="cause-children" wx:if="{{item.children && item.children.length > 0}}">
+        <text class="children-tag">包含 {{item.children.length}} 个子案由</text>
+        <text class="expand-icon">›</text>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{filteredCauses.length === 0}}">
+      <text class="empty-icon">📭</text>
+      <text class="empty-text">未找到相关案由</text>
+      <text class="empty-hint">请尝试其他关键词</text>
+    </view>
+  </view>
+
+  <!-- 案由详情弹窗 -->
+  <view class="modal-mask" wx:if="{{showDetail}}" bindtap="hideDetail">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-header">
+        <text class="modal-title">{{selectedCause.name}}</text>
+        <text class="modal-close" bindtap="hideDetail">✕</text>
+      </view>
+
+      <view class="modal-body">
+        <!-- 案由编码 -->
+        <view class="detail-item" wx:if="{{selectedCause.code}}">
+          <text class="detail-label">案由编码</text>
+          <text class="detail-value">{{selectedCause.code}}</text>
+        </view>
+
+        <!-- 案由描述 -->
+        <view class="detail-item" wx:if="{{selectedCause.desc}}">
+          <text class="detail-label">案由描述</text>
+          <text class="detail-value">{{selectedCause.desc}}</text>
+        </view>
+
+        <!-- 子案由列表 -->
+        <view class="detail-section" wx:if="{{selectedCause.children && selectedCause.children.length > 0}}">
+          <text class="detail-subtitle">子案由列表</text>
+          <view class="children-list">
+            <view class="child-item" wx:for="{{selectedCause.children}}" wx:key="code">
+              <text class="child-name">{{item.name}}</text>
+              <text class="child-code">{{item.code}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 法律依据 -->
+        <view class="detail-section">
+          <text class="detail-subtitle">法律依据</text>
+          <text class="detail-text">《民事案件案由规定》（法〔2025〕226号，2025年12月17日发布，2026年1月1日起施行）</text>
+          <text class="detail-text" wx:if="{{selectedCause.desc}}">{{selectedCause.desc}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 快速筛选 -->
+  <view class="filter-section">
+    <view class="filter-title">快速筛选</view>
+    <view class="filter-tags">
+      <view class="filter-tag {{filterTag === 'all' ? 'active' : ''}}" bindtap="selectFilter" data-tag="all">
+        <text>全部</text>
+      </view>
+      <view class="filter-tag {{filterTag === 'common' ? 'active' : ''}}" bindtap="selectFilter" data-tag="common">
+        <text>常见</text>
+      </view>
+      <view class="filter-tag {{filterTag === 'contract' ? 'active' : ''}}" bindtap="selectFilter" data-tag="contract">
+        <text>合同</text>
+      </view>
+      <view class="filter-tag {{filterTag === 'tort' ? 'active' : ''}}" bindtap="selectFilter" data-tag="tort">
+        <text>侵权</text>
+      </view>
+      <view class="filter-tag {{filterTag === 'family' ? 'active' : ''}}" bindtap="selectFilter" data-tag="family">
+        <text>婚姻家庭</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 统计信息 -->
+  <view class="stats-card">
+    <text class="stats-text">📊 共收录 {{totalCauses}} 个案由，当前显示 {{filteredCauses.length}} 个</text>
+  </view>
+
+  <!-- 免责声明 -->
+  <view class="disclaimer">
+    <text class="disclaimer-text">⚠️ 免责声明：案由信息仅供参考，具体案由由人民法院根据案件实际情况确定。如需专业法律服务，请联系王吉成律师（微信：lawyer_wang_zz）</text>
+  </view>
+</view>

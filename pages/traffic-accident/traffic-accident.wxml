@@ -1,0 +1,203 @@
+<!--pages/traffic-accident/traffic-accident.wxml-->
+<view class="container">
+  <!-- 标题区域 -->
+  <view class="header">
+    <view class="nav-back" bindtap="goBack">
+      <text class="back-icon">‹</text>
+      <text class="back-text">返回</text>
+    </view>
+    <text class="nav-title">交通事故赔偿计算</text>
+  </view>
+
+  <!-- 提示卡片 -->
+  <view class="tips-card">
+    <text class="tips-title">💡 计算说明</text>
+    <text class="tips-text">根据《最高人民法院关于审理人身损害赔偿案件适用法律若干问题的解释》计算</text>
+  </view>
+
+  <!-- 案件类型选择 -->
+  <view class="form-section">
+    <view class="section-title">案件类型</view>
+    <view class="type-selector">
+      <view class="type-item {{caseType === 'injury' ? 'active' : ''}}" bindtap="selectCaseType" data-type="inury">
+        <text class="type-icon">🏥</text>
+        <text class="type-name">人身损害</text>
+      </view>
+      <view class="type-item {{caseType === 'death' ? 'active' : ''}}" bindtap="selectCaseType" data-type="death">
+        <text class="type-icon">⚰️</text>
+        <text class="type-name">死亡赔偿</text>
+      </view>
+      <view class="type-item {{caseType === 'disability' ? 'active' : ''}}" bindtap="selectCaseType" data-type="disability">
+        <text class="type-icon">♿</text>
+        <text class="type-name">伤残赔偿</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 基础费用 -->
+  <view class="form-section">
+    <view class="section-title">基础费用（元）</view>
+
+    <!-- 医疗费 -->
+    <view class="form-item">
+      <text class="form-label">医疗费</text>
+      <input class="form-input" type="digit" placeholder="请输入医疗费用" bindinput="onInputChange" data-field="medicalExpense" value="{{formData.medicalExpense}}" />
+    </view>
+
+    <!-- 误工费 -->
+    <view class="form-item">
+      <text class="form-label">误工费</text>
+      <input class="form-input" type="digit" placeholder="请输入误工费用" bindinput="onInputChange" data-field="lostWages" value="{{formData.lostWages}}" />
+    </view>
+
+    <!-- 护理费 -->
+    <view class="form-item">
+      <text class="form-label">护理费</text>
+      <input class="form-input" type="digit" placeholder="请输入护理费用" bindinput="onInputChange" data-field="nursingFee" value="{{formData.nursingFee}}" />
+    </view>
+
+    <!-- 交通费 -->
+    <view class="form-item">
+      <text class="form-label">交通费</text>
+      <input class="form-input" type="digit" placeholder="请输入交通费用" bindinput="onInputChange" data-field="transportationFee" value="{{formData.transportationFee}}" />
+    </view>
+
+    <!-- 住院伙食补助费 -->
+    <view class="form-item">
+      <text class="form-label">住院伙食补助费</text>
+      <input class="form-input" type="digit" placeholder="请输入住院伙食补助费" bindinput="onInputChange" data-field="hospitalFoodFee" value="{{formData.hospitalFoodFee}}" />
+    </view>
+
+    <!-- 营养费 -->
+    <view class="form-item">
+      <text class="form-label">营养费</text>
+      <input class="form-input" type="digit" placeholder="请输入营养费" bindinput="onInputChange" data-field="nutritionFee" value="{{formData.nutritionFee}}" />
+    </view>
+  </view>
+
+  <!-- 伤残赔偿 -->
+  <view class="form-section" wx:if="{{caseType === 'disability'}}">
+    <view class="section-title">伤残赔偿</view>
+
+    <!-- 伤残等级 -->
+    <view class="form-item">
+      <text class="form-label">伤残等级</text>
+      <picker class="form-picker" mode="selector" range="{{disabilityLevels}}" value="{{disabilityIndex}}" bindchange="onDisabilityChange">
+        <view class="picker-text">
+          {{disabilityLevels[disabilityIndex]}}
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 受诉法院所在地上一年度城镇居民人均可支配收入 -->
+    <view class="form-item">
+      <text class="form-label">城镇居民人均可支配收入（元/年）</text>
+      <input class="form-input" type="digit" placeholder="如：49283" bindinput="onInputChange" data-field="urbanIncome" value="{{formData.urbanIncome}}" />
+      <text class="form-hint">参考当地上一年度统计数据</text>
+    </view>
+
+    <!-- 伤残赔偿年限 -->
+    <view class="form-item">
+      <text class="form-label">赔偿年限（年）</text>
+      <input class="form-input" type="digit" placeholder="一般按20年计算" bindinput="onInputChange" data-field="disabilityYears" value="{{formData.disabilityYears}}" />
+      <text class="form-hint">60岁以上每增加1岁减1年，75岁以上按5年计算</text>
+    </view>
+
+    <!-- 被扶养人生活费 -->
+    <view class="form-item">
+      <text class="form-label">被扶养人生活费</text>
+      <input class="form-input" type="digit" placeholder="如有被扶养人请填写" bindinput="onInputChange" data-field="dependentExpense" value="{{formData.dependentExpense}}" />
+    </view>
+
+    <!-- 精神损害抚慰金 -->
+    <view class="form-item">
+      <text class="form-label">精神损害抚慰金（元）</text>
+      <input class="form-input" type="digit" placeholder="一般5000-50000元" bindinput="onInputChange" data-field="mentalDistress" value="{{formData.mentalDistress}}" />
+    </view>
+  </view>
+
+  <!-- 死亡赔偿 -->
+  <view class="form-section" wx:if="{{caseType === 'death'}}">
+    <view class="section-title">死亡赔偿</view>
+
+    <!-- 死亡赔偿金 -->
+    <view class="form-item">
+      <text class="form-label">城镇居民人均可支配收入（元/年）</text>
+      <input class="form-input" type="digit" placeholder="如：49283" bindinput="onInputChange" data-field="urbanIncome" value="{{formData.urbanIncome}}" />
+      <text class="form-hint">参考当地上一年度统计数据</text>
+    </view>
+
+    <!-- 赔偿年限 -->
+    <view class="form-item">
+      <text class="form-label">赔偿年限（年）</text>
+      <input class="form-input" type="digit" placeholder="一般按20年计算" bindinput="onInputChange" data-field="deathYears" value="{{formData.deathYears}}" />
+    </view>
+
+    <!-- 丧葬费 -->
+    <view class="form-item">
+      <text class="form-label">受诉法院所在地上一年度职工月平均工资（元/月）</text>
+      <input class="form-input" type="digit" placeholder="如：7000" bindinput="onInputChange" data-field="monthlySalary" value="{{formData.monthlySalary}}" />
+      <text class="form-hint">丧葬费按6个月工资计算</text>
+    </view>
+
+    <!-- 被扶养人生活费 -->
+    <view class="form-item">
+      <text class="form-label">被扶养人生活费（元）</text>
+      <input class="form-input" type="digit" placeholder="如有被扶养人请填写" bindinput="onInputChange" data-field="dependentExpense" value="{{formData.dependentExpense}}" />
+    </view>
+
+    <!-- 精神损害抚慰金 -->
+    <view class="form-item">
+      <text class="form-label">精神损害抚慰金（元）</text>
+      <input class="form-input" type="digit" placeholder="一般50000-100000元" bindinput="onInputChange" data-field="mentalDistress" value="{{formData.mentalDistress}}" />
+    </view>
+  </view>
+
+  <!-- 计算按钮 -->
+  <view class="btn-group">
+    <button class="btn-primary" bindtap="calculate">计算赔偿金额</button>
+    <button class="btn-secondary" bindtap="reset">重置</button>
+  </view>
+
+  <!-- 计算结果 -->
+  <view class="result-card" wx:if="{{result}}">
+    <view class="result-header">
+      <text class="result-title">📊 计算结果</text>
+    </view>
+
+    <view class="result-total">
+      <text class="result-label">赔偿总额</text>
+      <text class="result-value">{{result.total}} 元</text>
+    </view>
+
+    <view class="result-divider"></view>
+
+    <view class="result-details">
+      <view class="detail-item" wx:for="{{result.details}}" wx:key="name">
+        <text class="detail-name">{{item.name}}</text>
+        <text class="detail-value">{{item.value}} 元</text>
+      </view>
+    </view>
+
+    <view class="result-divider"></view>
+
+    <view class="result-formula">
+      <text class="formula-title">计算公式</text>
+      <text class="formula-text">{{result.formula}}</text>
+    </view>
+  </view>
+
+  <!-- 法律依据 -->
+  <view class="legal-basis">
+    <view class="legal-title">⚖️ 法律依据</view>
+    <text class="legal-text">1. 《最高人民法院关于审理人身损害赔偿案件适用法律若干问题的解释》</text>
+    <text class="legal-text">2. 《民法典》侵权责任编</text>
+    <text class="legal-text">3. 《道路交通安全法》</text>
+  </view>
+
+  <!-- 免责声明 -->
+  <view class="disclaimer">
+    <text class="disclaimer-text">⚠️ 免责声明：本计算结果仅供参考，实际赔偿金额以法院判决为准。如需专业法律服务，请联系王吉成律师（微信：lawyer_wang_zz）</text>
+  </view>
+</view>

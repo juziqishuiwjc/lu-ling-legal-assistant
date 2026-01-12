@@ -1,0 +1,27 @@
+<!--pages/home/home.wxml-->
+<view class="container">
+  <!-- 顶部导航 -->
+  <view class="top-nav">
+    <text class="nav-title">庐陵吉成法答</text>
+  </view>
+
+  <!-- 主内容区域 -->
+  <scroll-view class="main-content" scroll-y>
+    <!-- 功能模块网格 -->
+    <view class="function-grid">
+      <block wx:for="{{functions}}" wx:key="id">
+        <view class="function-item" bindtap="handleFunctionTap" data-id="{{item.id}}">
+          <view class="function-icon-wrapper" style="background: {{item.color}}">
+            <text class="function-icon">{{item.icon}}</text>
+          </view>
+          <text class="function-name">{{item.name}}</text>
+        </view>
+      </block>
+    </view>
+  </scroll-view>
+
+  <!-- 版权信息 -->
+  <view class="copyright-footer">
+    <text class="copyright-text">© 2026 王吉成律师 版权所有 | 江西吉泰律师事务所</text>
+  </view>
+</view>

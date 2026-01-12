@@ -1,0 +1,183 @@
+<!--pages/compensation/compensation.wxml-->
+<view class="container">
+  <!-- 标题 -->
+  <view class="page-header">
+    <text class="page-title">经济补偿金计算器</text>
+    <text class="page-subtitle">根据《劳动合同法》计算</text>
+  </view>
+
+  <!-- 计算器表单 -->
+  <view class="calculator-form">
+    <!-- 补偿类型 -->
+    <view class="form-item">
+      <text class="form-label">补偿类型</text>
+      <picker class="form-picker" bindchange="onTypeChange" value="{{typeIndex}}" range="{{types}}">
+        <view class="picker-view">
+          {{types[typeIndex]}}
+          <text class="picker-arrow">></text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 月工资 -->
+    <view class="form-item">
+      <text class="form-label">月工资(元)</text>
+      <input
+        class="form-input"
+        type="digit"
+        placeholder="劳动合同解除或终止前12个月的平均工资"
+        value="{{salary}}"
+        bindinput="onSalaryInput"
+      />
+      <view class="input-tips">
+        <text class="tips-text">💡 包括基本工资、奖金、津贴、补贴等货币性收入</text>
+      </view>
+    </view>
+
+    <!-- 工作年限 - 年 -->
+    <view class="form-item">
+      <text class="form-label">工作年限(年)</text>
+      <input
+        class="form-input"
+        type="digit"
+        placeholder="在本单位工作的年数"
+        value="{{years}}"
+        bindinput="onYearsInput"
+      />
+    </view>
+
+    <!-- 工作年限 - 月 -->
+    <view class="form-item">
+      <text class="form-label">剩余月份(可选)</text>
+      <input
+        class="form-input"
+        type="digit"
+        placeholder="不满1年的部分月数(0-11月)"
+        value="{{months}}"
+        bindinput="onMonthsInput"
+      />
+    </view>
+
+    <!-- 是否违法解除 -->
+    <view class="form-item">
+      <text class="form-label">是否违法解除劳动合同</text>
+      <picker class="form-picker" bindchange="onIllegalChange" value="{{illegalIndex}}" range="{{illegalOptions}}">
+        <view class="picker-view">
+          {{illegalOptions[illegalIndex]}}
+          <text class="picker-arrow">></text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 当地平均工资 -->
+    <view class="form-item">
+      <text class="form-label">当地月平均工资(元,可选)</text>
+      <input
+        class="form-input"
+        type="digit"
+        placeholder="用于计算三倍封顶标准"
+        value="{{avgSalary}}"
+        bindinput="onAvgSalaryInput"
+      />
+      <view class="input-tips">
+        <text class="tips-text">💡 月工资高于当地平均工资3倍的,按3倍支付,年限最高12年</text>
+      </view>
+    </view>
+
+    <!-- 计算按钮 -->
+    <button class="calculate-button" bindtap="calculate">开始计算</button>
+  </view>
+
+  <!-- 计算结果 -->
+  <view class="result-card" wx:if="{{result !== null}}">
+    <view class="result-header">
+      <text class="result-title">{{result.typeName}}</text>
+    </view>
+
+    <view class="result-content">
+      <view class="result-item">
+        <text class="result-label">月工资</text>
+        <text class="result-value">¥{{result.appliedSalary}}/月</text>
+      </view>
+
+      <view class="result-item">
+        <text class="result-label">计算年限</text>
+        <text class="result-value">{{result.appliedYears}}年</text>
+      </view>
+
+      <view class="result-item" wx:if="{{result.isCapped}}">
+        <text class="result-label">封顶说明</text>
+        <text class="result-value warning">已按3倍封顶,12年封顶</text>
+      </view>
+
+      <view class="result-divider"></view>
+
+      <view class="result-item result-highlight">
+        <text class="result-label">{{result.typeName}}</text>
+        <text class="result-value result-amount">¥{{result.amount}}</text>
+      </view>
+
+      <view class="result-formula" wx:if="{{result.formula}}">
+        <text class="formula-title">计算公式：</text>
+        <text class="formula-text">{{result.formula}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 补偿类型说明 -->
+  <view class="info-card">
+    <view class="info-header">
+      <text class="info-title">📚 补偿类型说明</text>
+    </view>
+    <view class="info-content">
+      <view class="info-item">
+        <text class="info-title-mini">经济补偿金</text>
+        <text class="info-text">按劳动者在本单位工作的年限,每满一年支付一个月工资的标准向劳动者支付。</text>
+      </view>
+      <view class="info-divider"></view>
+      <view class="info-item">
+        <text class="info-title-mini">赔偿金</text>
+        <text class="info-text">用人单位违反劳动合同法规定解除或者终止劳动合同的,应当依照经济补偿标准的二倍向劳动者支付赔偿金。</text>
+      </view>
+      <view class="info-divider"></view>
+      <view class="info-item">
+        <text class="info-title-mini">代通知金</text>
+        <text class="info-text">用人单位提出解除劳动合同但未提前30天书面通知的,应支付一个月工资作为代通知金。</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 计算规则 -->
+  <view class="rules-card">
+    <view class="rules-header">
+      <text class="rules-title">📋 计算规则</text>
+    </view>
+    <view class="rules-content">
+      <text class="rules-text">1. 工作年限：每满1年支付1个月工资</text>
+      <text class="rules-text">2. 6个月以上不满1年的：按1年计算</text>
+      <text class="rules-text">3. 不满6个月的：支付半个月工资</text>
+      <text class="rules-text">4. 高薪封顶：工资≥平均工资3倍的,按3倍计算,年限最高12年</text>
+      <text class="rules-text">5. 赔偿金：经济补偿金×2</text>
+      <text class="rules-text">6. 代通知金：1个月工资</text>
+    </view>
+  </view>
+
+  <!-- 法律依据 -->
+  <view class="law-card">
+    <view class="law-header">
+      <text class="law-title">📜 法律依据</text>
+    </view>
+    <view class="law-content">
+      <text class="law-text">《劳动合同法》第47条：</text>
+      <text class="law-text">经济补偿按劳动者在本单位工作的年限,每满一年支付一个月工资的标准向劳动者支付。六个月以上不满一年的,按一年计算;不满六个月的,向劳动者支付半个月工资的经济补偿。</text>
+      <view class="law-divider"></view>
+      <text class="law-text">《劳动合同法》第87条：</text>
+      <text class="law-text">用人单位违反本法规定解除或者终止劳动合同的,应当依照本法第四十七条规定的经济补偿标准的二倍向劳动者支付赔偿金。</text>
+    </view>
+  </view>
+
+  <!-- 免责声明 -->
+  <view class="disclaimer">
+    <text class="disclaimer-text">⚠️ 本计算结果仅供参考，具体以劳动仲裁委员会或法院认定为准</text>
+  </view>
+</view>

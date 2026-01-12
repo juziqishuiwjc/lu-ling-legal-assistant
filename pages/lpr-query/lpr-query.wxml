@@ -1,0 +1,102 @@
+<!--pages/lpr-query/lpr-query.wxml-->
+<view class="container">
+  <!-- 标题 -->
+  <view class="page-header">
+    <text class="page-title">LPR利率查询</text>
+    <text class="page-subtitle">贷款市场报价利率历史数据</text>
+  </view>
+
+  <!-- 当前LPR展示 -->
+  <view class="current-lpr-card">
+    <view class="current-header">
+      <text class="current-title">📊 当前LPR利率</text>
+      <text class="update-date">更新时间: {{currentDate}}</text>
+    </view>
+    <view class="lpr-grid">
+      <view class="lpr-item">
+        <text class="lpr-label">1年期LPR</text>
+        <text class="lpr-value">{{currentLpr.oneYear}}%</text>
+      </view>
+      <view class="lpr-divider"></view>
+      <view class="lpr-item">
+        <text class="lpr-label">5年期LPR</text>
+        <text class="lpr-value">{{currentLpr.fiveYear}}%</text>
+      </view>
+    </view>
+    <view class="lpr-tips">
+      <text class="tips-text">💡 民间借贷利率保护上限：1年期LPR的4倍 = {{legalLimit}}%</text>
+    </view>
+  </view>
+
+  <!-- 筛选器 -->
+  <view class="filter-section">
+    <view class="filter-item">
+      <text class="filter-label">年份选择</text>
+      <picker class="filter-picker" mode="selector" range="{{years}}" bindchange="onYearChange">
+        <view class="picker-view">
+          <text>{{selectedYear}}</text>
+          <text class="picker-arrow">▼</text>
+        </view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 历史数据列表 -->
+  <view class="history-section">
+    <view class="history-header">
+      <text class="history-title">📈 LPR历史数据 ({{selectedYear}}年)</text>
+    </view>
+
+    <view class="history-list">
+      <block wx:for="{{filteredHistory}}" wx:key="id">
+        <view class="history-item">
+          <view class="item-left">
+            <text class="item-date">{{item.date}}</text>
+          </view>
+          <view class="item-right">
+            <view class="rate-group">
+              <text class="rate-label">1年期</text>
+              <text class="rate-value {{item.oneYearChanged ? 'changed' : ''}}">{{item.oneYear}}%</text>
+            </view>
+            <view class="rate-group">
+              <text class="rate-label">5年期</text>
+              <text class="rate-value {{item.fiveYearChanged ? 'changed' : ''}}">{{item.fiveYear}}%</text>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 知识科普 -->
+  <view class="knowledge-card">
+    <view class="knowledge-header">
+      <text class="knowledge-title">📚 什么是LPR？</text>
+    </view>
+    <view class="knowledge-content">
+      <text class="knowledge-text">LPR（Loan Prime Rate，贷款市场报价利率）是由中国人民银行授权全国银行间同业拆借中心计算并公布的基础性贷款参考利率。</text>
+
+      <view class="knowledge-divider"></view>
+
+      <text class="knowledge-subtitle">🎯 LPR的用途：</text>
+      <text class="knowledge-text">1. 银行发放贷款利率参考</text>
+      <text class="knowledge-text">2. 民间借贷利率上限计算标准（4倍）</text>
+      <text class="knowledge-text">3. 迟延履行利息计算参考</text>
+
+      <view class="knowledge-divider"></view>
+
+      <text class="knowledge-subtitle">📅 发布时间：</text>
+      <text class="knowledge-text">每月20日发布（遇节假日顺延）</text>
+
+      <view class="knowledge-divider"></view>
+
+      <text class="knowledge-subtitle">🏦 期限品种：</text>
+      <text class="knowledge-text">1年期、5年期以上</text>
+    </view>
+  </view>
+
+  <!-- 免责声明 -->
+  <view class="disclaimer">
+    <text class="disclaimer-text">⚠️ 数据仅供参考，实际利率以中国人民银行公布为准</text>
+  </view>
+</view>

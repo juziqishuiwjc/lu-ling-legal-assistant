@@ -1,0 +1,65 @@
+<!--pages/legal-data/legal-data.wxml-->
+<view class="container">
+  <!-- 标题 -->
+  <view class="page-header">
+    <text class="page-title">常用年度数据</text>
+    <text class="page-subtitle">法律计算常用统计数据</text>
+  </view>
+
+  <!-- 年份选择 -->
+  <view class="filter-section">
+    <view class="filter-item">
+      <text class="filter-label">年度</text>
+      <picker class="filter-picker" mode="selector" range="{{years}}" bindchange="onYearChange">
+        <view class="picker-view">
+          <text>{{years[selectedYear]}}</text>
+          <text class="picker-arrow">▼</text>
+        </view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 数据卡片 -->
+  <view class="data-card">
+    <view class="data-header">
+      <text class="data-title">{{years[selectedYear]}}年统计数据</text>
+    </view>
+    <view class="data-content">
+      <view class="data-item">
+        <text class="data-label">全国城镇居民人均可支配收入</text>
+        <text class="data-value">{{data.urbanIncome}}</text>
+      </view>
+      <view class="data-item">
+        <text class="data-label">全国农村居民人均可支配收入</text>
+        <text class="data-value">{{data.ruralIncome}}</text>
+      </view>
+      <view class="data-item">
+        <text class="data-label">城镇非私营单位就业人员平均工资</text>
+        <text class="data-value">{{data.avgWage}}</text>
+      </view>
+      <view class="data-item">
+        <text class="data-label">全国居民人均消费支出</text>
+        <text class="data-value">{{data.consumption}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 用途说明 -->
+  <view class="usage-card">
+    <view class="usage-header">
+      <text class="usage-title">💡 数据用途</text>
+    </view>
+    <view class="usage-content">
+      <text class="usage-text">• 人身损害赔偿计算</text>
+      <text class="usage-text">• 误工费计算</text>
+      <text class="usage-text">• 死亡赔偿金计算</text>
+      <text class="usage-text">• 被扶养人生活费计算</text>
+      <text class="usage-text">• 经济补偿金计算(3倍封顶)</text>
+    </view>
+  </view>
+
+  <!-- 免责声明 -->
+  <view class="disclaimer">
+    <text class="disclaimer-text">⚠️ 数据来源于国家统计局，具体以法院所在地统计局公布为准</text>
+  </view>
+</view>

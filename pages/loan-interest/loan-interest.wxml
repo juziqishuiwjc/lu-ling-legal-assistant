@@ -1,0 +1,155 @@
+<!--pages/loan-interest/loan-interest.wxml-->
+<view class="container">
+  <!-- 标题 -->
+  <view class="page-header">
+    <text class="page-title">民间借贷利息计算器</text>
+    <text class="page-subtitle">根据最高人民法院规定计算</text>
+  </view>
+
+  <!-- 计算器表单 -->
+  <view class="calculator-form">
+    <!-- 借款金额 -->
+    <view class="form-item">
+      <text class="form-label">借款金额(元)</text>
+      <input
+        class="form-input"
+        type="digit"
+        placeholder="请输入借款金额"
+        value="{{amount}}"
+        bindinput="onAmountInput"
+      />
+    </view>
+
+    <!-- 年利率 -->
+    <view class="form-item">
+      <text class="form-label">年利率(%)</text>
+      <input
+        class="form-input"
+        type="digit"
+        placeholder="请输入年利率"
+        value="{{interestRate}}"
+        bindinput="onInterestRateInput"
+      />
+      <view class="input-tips">
+        <text class="tips-text">💡 当前法律保护上限：LPR的4倍 ({{lprRate}}%)</text>
+      </view>
+    </view>
+
+    <!-- 借款日期 -->
+    <view class="form-item">
+      <text class="form-label">借款日期</text>
+      <picker
+        class="form-picker"
+        mode="date"
+        value="{{startDate}}"
+        bindchange="onStartDateChange"
+      >
+        <view class="picker-view">
+          {{startDate || '请选择日期'}}
+          <text class="picker-arrow">📅</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 还款日期 -->
+    <view class="form-item">
+      <text class="form-label">还款日期</text>
+      <picker
+        class="form-picker"
+        mode="date"
+        value="{{endDate}}"
+        bindchange="onEndDateChange"
+      >
+        <view class="picker-view">
+          {{endDate || '请选择日期'}}
+          <text class="picker-arrow">📅</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 计息方式 -->
+    <view class="form-item">
+      <text class="form-label">计息方式</text>
+      <picker
+        class="form-picker"
+        bindchange="onMethodChange"
+        value="{{methodIndex}}"
+        range="{{methods}}"
+      >
+        <view class="picker-view">
+          {{methods[methodIndex]}}
+          <text class="picker-arrow">></text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 计算按钮 -->
+    <button class="calculate-button" bindtap="calculate">计算利息</button>
+  </view>
+
+  <!-- 计算结果 -->
+  <view class="result-card" wx:if="{{result !== null}}">
+    <view class="result-header">
+      <text class="result-title">计算结果</text>
+    </view>
+    <view class="result-content">
+      <view class="result-item">
+        <text class="result-label">借款金额</text>
+        <text class="result-value">¥{{amount}}</text>
+      </view>
+      <view class="result-item">
+        <text class="result-label">借款期限</text>
+        <text class="result-value">{{loanDays}}天 ({{loanYears}}年)</text>
+      </view>
+      <view class="result-item">
+        <text class="result-label">适用年利率</text>
+        <text class="result-value">{{appliedRate}}%</text>
+      </view>
+      <view class="result-divider"></view>
+      <view class="result-item result-highlight">
+        <text class="result-label">应付利息</text>
+        <text class="result-value result-amount">¥{{result}}</text>
+      </view>
+      <view class="result-item result-total">
+        <text class="result-label">本息合计</text>
+        <text class="result-value total-amount">¥{{totalAmount}}</text>
+      </view>
+    </view>
+
+    <!-- 利率合法性分析 -->
+    <view class="analysis-card" wx:if="{{isOverRate !== null}}">
+      <view class="analysis-header">
+        <text class="analysis-title">⚖️ 利率合法性分析</text>
+      </view>
+      <view class="analysis-content">
+        <view class="analysis-item {{isOverRate ? 'warning' : 'success'}}">
+          <text class="analysis-icon">{{isOverRate ? '⚠️' : '✅'}}</text>
+          <text class="analysis-text">{{isOverRate ? overRateMsg : legalMsg}}</text>
+        </view>
+        <view class="analysis-detail" wx:if="{{isOverRate}}">
+          <text class="detail-text">• 法律保护利息：¥{{legalInterest}}</text>
+          <text class="detail-text">• 超出部分：¥{{excessInterest}}</text>
+          <text class="detail-text">• 超出部分不受法律保护</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 法律依据 -->
+  <view class="law-card">
+    <view class="law-header">
+      <text class="law-title">📜 法律依据</text>
+    </view>
+    <view class="law-content">
+      <text class="law-text">《最高人民法院关于审理民间借贷案件适用法律若干问题的规定》第25条：</text>
+      <text class="law-text">出借人请求借款人按照合同约定利率支付利息的，人民法院应予支持，但是双方约定的利率超过合同成立时一年期贷款市场报价利率四倍的除外。</text>
+      <view class="law-divider"></view>
+      <text class="law-text">前款所称"一年期贷款市场报价利率"，是指中国人民银行授权全国银行间同业拆借中心自2019年8月20日起每月发布的一年期贷款市场报价利率。</text>
+    </view>
+  </view>
+
+  <!-- 免责声明 -->
+  <view class="disclaimer">
+    <text class="disclaimer-text">⚠️ 本计算结果仅供参考，实际利率以借款合同约定为准</text>
+  </view>
+</view>

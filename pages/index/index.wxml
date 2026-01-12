@@ -2,113 +2,127 @@
 <view class="container">
   <!-- 顶部导航 -->
   <view class="top-nav">
-    <text class="nav-title">庐陵吉成法答</text>
-    <view class="nav-right" bindtap="goToUserCenter">
-      <text class="nav-icon">👤</text>
-      <text class="nav-text">我的</text>
+    <view class="nav-back" bindtap="goBack">
+      <text class="back-icon">‹</text>
+      <text class="back-text">返回</text>
     </view>
+    <text class="nav-title">律师介绍</text>
   </view>
 
-  <!-- 聊天消息区域 -->
-  <scroll-view
-    class="chat-area"
-    scroll-y
-    scroll-into-view="{{scrollToView}}"
-    scroll-with-animation>
+  <!-- 主内容区域 -->
+  <scroll-view class="main-content" scroll-y>
+    <!-- 律师头像和名称 -->
+    <view class="lawyer-header">
+      <image class="lawyer-avatar" src="https://pic1.imgdb.cn/item/6963714075db907620f2acb0.jpg" mode="aspectFill"></image>
+      <text class="lawyer-name">王吉成律师</text>
+      <text class="lawyer-title">江西吉泰律师事务所 · 刑事辩护律师</text>
+      <text class="lawyer-tag">专注职务犯罪 · 经济犯罪 · 毒品犯罪</text>
+    </view>
 
-    <!-- 欢迎消息 -->
-    <view class="message-row assistant-row" wx:if="{{messages.length === 0}}">
-      <view class="message-content assistant-message welcome-message">
-        <text class="message-text">您好！我是王吉成律师的AI助手 👋
-
-专业解答：劳动纠纷、合同审查、婚姻家庭、民事纠纷等法律问题
-
-今日剩余次数：{{remainingCount}}次
-
-请问有什么可以帮您的？
-        </text>
+    <!-- 律师简介 -->
+    <view class="section lawyer-intro">
+      <view class="section-title">
+        <text class="title-icon">📋</text>
+        <text class="title-text">律师简介</text>
+      </view>
+      <view class="intro-content">
+        <text class="intro-text">王吉成律师，现执业于江西省吉安市江西吉泰律师事务所，主要从事刑事辩护业务。在吉安从事法律工作以来，认真对待每一个案件，努力为当事人提供专业的法律服务。</text>
+        <text class="intro-text">业务范围包括职务犯罪、经济犯罪、毒品犯罪及其他刑事案件的辩护。在办案过程中，注重程序细节，努力维护当事人的合法权益。</text>
+        <text class="intro-text intro-motto">秉持"受人之托，忠人之事"的理念，认真分析案情，做好庭辩工作，希望能为当事人提供力所能及的帮助。</text>
       </view>
     </view>
 
-    <!-- 消息列表 -->
-    <block wx:for="{{messages}}" wx:key="id">
-      <!-- 用户消息 -->
-      <view class="message-row user-row" id="msg-{{item.id}}" wx:if="{{item.role === 'user'}}">
-        <view class="message-content-wrapper">
-          <view class="message-content user-message">
-            <text class="message-text">{{item.content}}</text>
-          </view>
-          <!-- 会员复制按钮 -->
-          <view class="copy-button" wx:if="{{isPaid}}" bindtap="copyText" data-text="{{item.content}}">
-            <text class="copy-icon">📋</text>
+    <!-- 专业领域 -->
+    <view class="section">
+      <view class="section-title">
+        <text class="title-icon">⚖️</text>
+        <text class="title-text">专业领域</text>
+      </view>
+      <view class="expertise-list">
+        <view class="expertise-item">
+          <view class="expertise-number">01</view>
+          <view class="expertise-content">
+            <text class="expertise-name">职务犯罪辩护</text>
+            <text class="expertise-desc">贪污贿赂、渎职侵权等公职人员犯罪的辩护工作，认真分析案件事实，把握法律适用要点。</text>
           </view>
         </view>
-        <image class="avatar user-avatar" src="{{userAvatar || '/images/user-avatar.svg'}}" mode="aspectFill"></image>
-      </view>
-
-      <!-- 助手消息 -->
-      <view class="message-row assistant-row" id="msg-{{item.id}}" wx:else>
-        <image class="avatar assistant-avatar" src="/images/assistant-avatar.svg" mode="aspectFit"></image>
-        <view class="message-content-wrapper">
-          <view class="message-content assistant-message">
-            <text class="message-text">{{item.content}}</text>
-          </view>
-          <!-- 会员复制按钮 -->
-          <view class="copy-button" wx:if="{{isPaid}}" bindtap="copyText" data-text="{{item.content}}">
-            <text class="copy-icon">📋</text>
+        <view class="expertise-item">
+          <view class="expertise-number">02</view>
+          <view class="expertise-content">
+            <text class="expertise-name">经济犯罪辩护</text>
+            <text class="expertise-desc">合同诈骗、非法经营、集资诈骗等经济类犯罪辩护，注重证据细节，维护当事人权益。</text>
           </view>
         </view>
-      </view>
-    </block>
-
-    <!-- 加载提示 -->
-    <view class="message-row assistant-row" wx:if="{{loading}}">
-      <image class="avatar assistant-avatar" src="/images/assistant-avatar.svg" mode="aspectFit"></image>
-      <view class="message-content assistant-message loading">
-        <view class="typing-dots">
-          <view class="dot"></view>
-          <view class="dot"></view>
-          <view class="dot"></view>
+        <view class="expertise-item">
+          <view class="expertise-number">03</view>
+          <view class="expertise-content">
+            <text class="expertise-name">毒品犯罪辩护</text>
+            <text class="expertise-desc">走私、贩卖、运输、制造毒品等相关案件辩护，熟悉毒品案件程序，从证据和定性角度开展辩护。</text>
+          </view>
+        </view>
+        <view class="expertise-item">
+          <view class="expertise-number">04</view>
+          <view class="expertise-content">
+            <text class="expertise-name">其他刑事案件</text>
+            <text class="expertise-desc">其他各类刑事案件辩护，参与侦查、审查起诉、审判各阶段，认真负责地做好辩护工作。</text>
+          </view>
         </view>
       </view>
     </view>
 
-    <!-- 打字光标效果 -->
-    <view class="message-row assistant-row" wx:if="{{messages.length > 0 && messages[messages.length-1].isTyping}}">
-      <image class="avatar assistant-avatar" src="/images/assistant-avatar.svg" mode="aspectFit"></image>
-      <view class="message-content assistant-message">
-        <text class="message-text">{{messages[messages.length-1].content}}<text class="cursor">|</text></text>
+    <!-- 办案理念 -->
+    <view class="section philosophy-section">
+      <view class="section-title">
+        <text class="title-icon">💡</text>
+        <text class="title-text">办案理念</text>
+      </view>
+      <view class="philosophy-content">
+        <view class="philosophy-quote">
+          <text class="quote-cn">"受人之托，忠人之事"</text>
+          <text class="quote-en">"Entrusted by others, faithful to their cause"</text>
+        </view>
+        <text class="philosophy-text">刑事案件关系到当事人的自由和权利。在办案过程中，坚持以事实为依据，以法律为准绳，认真对待每一个案件，努力维护当事人的合法权益，希望能够帮助当事人解决问题。</text>
+      </view>
+    </view>
+
+    <!-- 办公地址 -->
+    <view class="section address-section">
+      <view class="section-title">
+        <text class="title-icon">📍</text>
+        <text class="title-text">办公地址</text>
+      </view>
+      <view class="address-content">
+        <text class="address-text">江西省吉安市吉州区</text>
+        <text class="address-text">平园路9号金光道大厦19楼</text>
+        <view class="consultation-fee">
+          <text class="fee-label">咨询收费</text>
+          <text class="fee-amount">600元/小时</text>
+        </view>
+        <view class="contact-buttons">
+          <button class="contact-button" bindtap="makePhoneCall">
+            <text class="button-icon">📞</text>
+            <text class="button-text">拨打电话</text>
+          </button>
+          <button class="contact-button secondary" bindtap="copyWeChat">
+            <text class="button-icon">💬</text>
+            <text class="button-text">复制微信号</text>
+          </button>
+        </view>
+      </view>
+    </view>
+
+    <!-- AI助手提示 -->
+    <view class="ai-tip" bindtap="goToLawyerWebsite">
+      <view class="tip-icon">🤖</view>
+      <view class="tip-content">
+        <text class="tip-title">王吉成律师AI助手</text>
+        <text class="tip-desc">基于GLM-4.6 · 仅供参考</text>
       </view>
     </view>
   </scroll-view>
 
-  <!-- 输入区域 -->
-  <view class="input-area">
-    <view class="input-box">
-      <textarea
-        class="input-field"
-        value="{{inputText}}"
-        bindinput="onInputChange"
-        bindconfirm="sendMessage"
-        confirm-type="send"
-        placeholder="请输入您的法律问题..."
-        placeholder-class="input-placeholder"
-        auto-height
-        maxlength="1000"
-        adjust-position="{{true}}"
-        show-confirm-bar="{{false}}"
-      />
-      <button
-        class="send-button {{hasInput ? 'active' : ''}}"
-        bindtap="sendMessage"
-        disabled="{{!hasInput || loading}}"
-      >
-        发送
-      </button>
-    </view>
-    <!-- 版权信息 -->
-    <view class="copyright-footer">
-      <text class="copyright-text">© 2025 王吉成律师 版权所有</text>
-    </view>
+  <!-- 版权信息 -->
+  <view class="copyright-footer">
+    <text class="copyright-text">© 2026 王吉成律师 版权所有 | 江西吉泰律师事务所</text>
   </view>
 </view>

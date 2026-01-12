@@ -1,0 +1,183 @@
+<!--pages/bankruptcy-fee/bankruptcy-fee.wxml-->
+<view class="container">
+  <!-- 标题区域 -->
+  <view class="header">
+    <view class="nav-back" bindtap="goBack">
+      <text class="back-icon">‹</text>
+      <text class="back-text">返回</text>
+    </view>
+    <text class="nav-title">破产管理人报酬</text>
+  </view>
+
+  <!-- 提示卡片 -->
+  <view class="tips-card">
+    <text class="tips-title">💡 计算说明</text>
+    <text class="tips-text">根据《最高人民法院关于审理企业破产案件确定管理人报酬的规定》计算</text>
+  </view>
+
+  <!-- 计算类型 -->
+  <view class="form-section">
+    <view class="section-title">计算类型</view>
+    <view class="type-selector">
+      <view class="type-item {{calcType === 'general' ? 'active' : ''}}" bindtap="selectCalcType" data-type="general">
+        <text class="type-name">最终破产财产</text>
+      </view>
+      <view class="type-item {{calcType === 'secured' ? 'active' : ''}}" bindtap="selectCalcType" data-type="secured">
+        <text class="type-name">担保权人受偿</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 普通破产财产计算 -->
+  <view class="form-section" wx:if="{{calcType === 'general'}}">
+    <view class="section-title">破产财产信息</view>
+
+    <!-- 最终破产财产价值 -->
+    <view class="form-item">
+      <text class="form-label">最终破产财产价值（万元）</text>
+      <input class="form-input" type="digit" placeholder="请输入破产财产价值" bindinput="onInputChange" data-field="propertyValue" value="{{formData.propertyValue}}" />
+      <text class="form-hint">指最终清偿的破产财产总额</text>
+    </view>
+  </view>
+
+  <!-- 担保权人受偿计算 -->
+  <view class="form-section" wx:if="{{calcType === 'secured'}}">
+    <view class="section-title">担保权人受偿信息</view>
+
+    <!-- 担保权人受偿金额 -->
+    <view class="form-item">
+      <text class="form-label">担保权人受偿金额（万元）</text>
+      <input class="form-input" type="digit" placeholder="请输入受偿金额" bindinput="onInputChange" data-field="securedAmount" value="{{formData.securedAmount}}" />
+      <text class="form-hint">指担保权人实际获得的受偿金额</text>
+    </view>
+
+    <!-- 管理人管理担保财产的报酬比例 -->
+    <view class="form-item">
+      <text class="form-label">是否涉及管理人管理担保财产？</text>
+      <view class="radio-group">
+        <view class="radio-item {{hasManagement ? 'active' : ''}}" bindtap="selectManagement" data-value="true">
+          <text class="radio-icon">{{hasManagement ? '☑' : '☐'}}</text>
+          <text class="radio-label">是</text>
+        </view>
+        <view class="radio-item {{!hasManagement ? 'active' : ''}}" bindtap="selectManagement" data-value="false">
+          <text class="radio-icon">{{!hasManagement ? '☑' : '☐'}}</text>
+          <text class="radio-label">否</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 特殊情况说明 -->
+  <view class="info-card">
+    <view class="info-title">📌 特殊情况说明</view>
+    <view class="info-item">
+      <text class="info-label">小额案件上限：</text>
+      <text class="info-value">清算价值100万以下最高12万元，100-200万最高24万元，200-500万最高40万元</text>
+    </view>
+    <view class="info-item">
+      <text class="info-label">分段计算：</text>
+      <text class="info-value">采用分段累计方法，不同档位适用不同比例</text>
+    </view>
+    <view class="info-item">
+      <text class="info-label">担保财产：</text>
+      <text class="info-value">管理人管理担保财产的，按分段比例计算</text>
+    </view>
+  </view>
+
+  <!-- 计算按钮 -->
+  <view class="btn-group">
+    <button class="btn-primary" bindtap="calculate">计算报酬</button>
+    <button class="btn-secondary" bindtap="reset">重置</button>
+  </view>
+
+  <!-- 计算结果 -->
+  <view class="result-card" wx:if="{{result}}">
+    <view class="result-header">
+      <text class="result-title">📊 计算结果</text>
+    </view>
+
+    <view class="result-total">
+      <text class="result-label">管理人报酬</text>
+      <text class="result-value">{{result.total}} 万元</text>
+    </view>
+
+    <view class="result-divider"></view>
+
+    <!-- 分段计算详情 -->
+    <view class="result-section" wx:if="{{result.segments && result.segments.length > 0}}">
+      <text class="result-subtitle">分段计算详情</text>
+      <view class="segment-list">
+        <view class="segment-item" wx:for="{{result.segments}}" wx:key="range">
+          <view class="segment-range">{{item.range}}</view>
+          <view class="segment-detail">
+            <text class="segment-amount">金额：{{item.amount}}万元</text>
+            <text class="segment-rate">比例：{{item.rate}}</text>
+            <text class="segment-fee">报酬：{{item.fee}}万元</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="result-divider"></view>
+
+    <!-- 说明信息 -->
+    <view class="result-notice" wx:if="{{result.notice}}">
+      <text class="notice-icon">⚠️</text>
+      <text class="notice-text">{{result.notice}}</text>
+    </view>
+
+    <view class="result-divider"></view>
+
+    <view class="result-formula">
+      <text class="formula-title">计算依据</text>
+      <text class="formula-text">{{result.formula}}</text>
+    </view>
+  </view>
+
+  <!-- 分段标准说明 -->
+  <view class="standard-card">
+    <view class="standard-title">📋 分段收费标准</view>
+    <view class="standard-table">
+      <view class="table-header">
+        <text class="header-cell">财产价值区间</text>
+        <text class="header-cell">比例</text>
+      </view>
+      <view class="table-row">
+        <text class="row-cell">不超过100万元</text>
+        <text class="row-cell">12%</text>
+      </view>
+      <view class="table-row">
+        <text class="row-cell">100万-500万元</text>
+        <text class="row-cell">10%</text>
+      </view>
+      <view class="table-row">
+        <text class="row-cell">500万-1000万元</text>
+        <text class="row-cell">8%</text>
+      </view>
+      <view class="table-row">
+        <text class="row-cell">1000万-5000万元</text>
+        <text class="row-cell">6%</text>
+      </view>
+      <view class="table-row">
+        <text class="row-cell">5000万-1亿元</text>
+        <text class="row-cell">3%</text>
+      </view>
+      <view class="table-row">
+        <text class="row-cell">超过1亿元</text>
+        <text class="row-cell">1%</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 法律依据 -->
+  <view class="legal-basis">
+    <view class="legal-title">⚖️ 法律依据</view>
+    <text class="legal-text">《最高人民法院关于审理企业破产案件确定管理人报酬的规定》（法释〔2007〕9号）</text>
+    <text class="legal-text">第二条：管理人报酬应根据债务人最终清偿的财产价值总额确定</text>
+  </view>
+
+  <!-- 免责声明 -->
+  <view class="disclaimer">
+    <text class="disclaimer-text">⚠️ 免责声明：本计算结果仅供参考，实际报酬由人民法院确定。如需专业法律服务，请联系王吉成律师（微信：lawyer_wang_zz）</text>
+  </view>
+</view>

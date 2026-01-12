@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: linear-gradient(180deg, #f0f4ff 0%, #f5f5f5 100%);
+  background: linear-gradient(180deg, #f5f7fa 0%, #f0f2f5 100%);
 }
 
 /* 顶部导航 */
@@ -14,21 +14,44 @@
   padding: 20rpx 30rpx;
   background: white;
   box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+.nav-back {
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+  padding: 8rpx 16rpx;
+}
+
+.back-icon {
+  font-size: 40rpx;
+  color: #4A90E2;
+  font-weight: bold;
+}
+
+.back-text {
+  font-size: 28rpx;
+  color: #4A90E2;
 }
 
 .nav-title {
   font-size: 36rpx;
   font-weight: bold;
   color: #2c3e50;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .nav-right {
   display: flex;
   align-items: center;
-  gap: 8rpx;
-  padding: 12rpx 24rpx;
+  justify-content: center;
+  width: 60rpx;
+  height: 60rpx;
   background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
-  border-radius: 30rpx;
+  border-radius: 50%;
   box-shadow: 0 2rpx 8rpx rgba(74, 144, 226, 0.3);
 }
 
@@ -36,297 +59,334 @@
   font-size: 28rpx;
 }
 
-.nav-text {
-  font-size: 28rpx;
-  color: white;
-  font-weight: bold;
-}
-
-/* 聊天区域 */
-.chat-area {
+/* 主内容区域 */
+.main-content {
   flex: 1;
-  padding: 30rpx 20rpx;
   overflow-y: auto;
-  padding-bottom: 30rpx;
 }
 
-/* 消息行 */
-.message-row {
+/* 律师头部信息 */
+.lawyer-header {
   display: flex;
-  margin-bottom: 40rpx;
-  align-items: flex-start;
-  animation: fadeIn 0.3s ease-in;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20rpx);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.user-row {
-  flex-direction: row-reverse;
-}
-
-.assistant-row {
-  flex-direction: row;
-}
-
-/* 头像 */
-.avatar {
-  width: 88rpx;
-  height: 88rpx;
-  border-radius: 50%;
-  background-color: #e0e0e0;
-  flex-shrink: 0;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.15);
-}
-
-.user-avatar {
-  margin-left: 20rpx;
+  flex-direction: column;
+  align-items: center;
+  padding: 60rpx 40rpx 40rpx;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-.assistant-avatar {
-  margin-right: 20rpx;
-  background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
-}
-
-/* 消息气泡 - 美化版 */
-.message-content {
-  max-width: 75%;
-  padding: 24rpx 28rpx;
-  border-radius: 20rpx;
   position: relative;
-  word-wrap: break-word;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
 }
 
-.user-message {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border-top-right-radius: 6rpx;
-  box-shadow: 0 4rpx 16rpx rgba(102, 126, 234, 0.25);
+.lawyer-header::after {
+  content: '';
+  position: absolute;
+  bottom: -20rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 20rpx solid transparent;
+  border-right: 20rpx solid transparent;
+  border-top: 20rpx solid #764ba2;
 }
 
-.assistant-message {
-  background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
-  color: #2c3e50;
-  border-top-left-radius: 6rpx;
-  border: 1.5rpx solid #e8ecef;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
-}
-
-.welcome-message {
-  background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
-  color: white;
-  box-shadow: 0 6rpx 24rpx rgba(74, 144, 226, 0.35);
-  border-radius: 24rpx;
-  padding: 32rpx 36rpx;
-}
-
-.message-text {
-  font-size: 30rpx;
-  line-height: 1.8;
-  white-space: pre-wrap;
-  word-break: break-all;
-}
-
-/* 加载动画 */
-.loading {
-  padding: 30rpx 40rpx;
-}
-
-.typing-dots {
-  display: flex;
-  gap: 8rpx;
-}
-
-.dot {
-  width: 12rpx;
-  height: 12rpx;
-  background-color: #4A90E2;
+.lawyer-avatar {
+  width: 180rpx;
+  height: 180rpx;
   border-radius: 50%;
-  animation: typing 1.4s infinite;
+  border: 6rpx solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.2);
+  margin-bottom: 24rpx;
 }
 
-.dot:nth-child(1) {
-  animation-delay: 0s;
-}
-
-.dot:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.dot:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-@keyframes typing {
-  0%, 60%, 100% {
-    opacity: 0.3;
-    transform: translateY(0);
-  }
-  30% {
-    opacity: 1;
-    transform: translateY(-10rpx);
-  }
-}
-
-/* 光标闪烁动画 */
-.cursor {
-  display: inline-block;
-  animation: blink 1s infinite;
+.lawyer-name {
+  font-size: 44rpx;
   font-weight: bold;
-  color: #4A90E2;
+  color: white;
+  margin-bottom: 12rpx;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.2);
 }
 
-@keyframes blink {
-  0%, 50% {
-    opacity: 1;
-  }
-  51%, 100% {
-    opacity: 0;
-  }
-}
-
-/* 输入区域 */
-.input-area {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 1) 100%);
-  padding: 20rpx;
-  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
-  border-top: 1rpx solid #e8f0ff;
-  box-shadow: 0 -4rpx 20rpx rgba(74, 144, 226, 0.1);
-  backdrop-filter: blur(10rpx);
-}
-
-/* 输入框区域 */
-.input-box {
-  display: flex;
-  align-items: flex-end;
-  gap: 12rpx;
-}
-
-/* 输入框 - 占据主要空间 */
-.input-field {
-  flex: 1;
-  width: auto !important;
-  min-height: 88rpx;
-  max-height: 300rpx;
-  padding: 20rpx 24rpx;
-  background-color: #f8faff;
-  border-radius: 20rpx;
-  border: 2rpx solid #e8f0ff;
-  font-size: 30rpx;
-  line-height: 1.6;
-  transition: all 0.3s;
-  box-sizing: border-box;
-}
-
-.input-field:focus {
-  background-color: white;
-  border-color: #4A90E2;
-  box-shadow: 0 0 0 4rpx rgba(74, 144, 226, 0.1);
-}
-
-.input-placeholder {
-  color: #a0a0a0;
-}
-
-/* 发送按钮 - 紧凑 */
-.send-button {
-  width: 90rpx !important;
-  height: 88rpx;
-  line-height: 88rpx;
-  padding: 0;
-  margin: 0;
-  background: linear-gradient(135deg, #e8e8e8 0%, #d0d0d0 100%);
-  color: #999;
+.lawyer-title {
   font-size: 26rpx;
-  font-weight: 500;
-  border-radius: 20rpx;
-  border: none;
-  transition: all 0.3s;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
-  flex-shrink: 0;
-  display: inline-block;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 16rpx;
   text-align: center;
 }
 
-.send-button::after {
-  border: none;
+.lawyer-tag {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 8rpx 24rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20rpx;
 }
 
-.send-button.active {
-  background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
-  color: white;
-  box-shadow: 0 4rpx 12rpx rgba(74, 144, 226, 0.3);
-  transform: translateY(-2rpx);
+/* 区块样式 */
+.section {
+  background: white;
+  margin: 24rpx;
+  border-radius: 16rpx;
+  padding: 32rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
 }
 
-.send-button.active:active {
-  transform: translateY(0);
-  box-shadow: 0 2rpx 8rpx rgba(74, 144, 226, 0.3);
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 24rpx;
+  padding-bottom: 16rpx;
+  border-bottom: 2rpx solid #f0f0f0;
 }
 
-.send-button[disabled] {
-  opacity: 0.6;
-  transform: none;
+.title-icon {
+  font-size: 36rpx;
 }
 
-/* 消息内容包装器（用于放置复制按钮） */
-.message-content-wrapper {
+.title-text {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+/* 律师简介 */
+.lawyer-intro {
+  background: linear-gradient(135deg, #fff9e6 0%, #fff 100%);
+}
+
+.intro-content {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  max-width: 75%;
+  gap: 20rpx;
 }
 
-.user-row .message-content-wrapper {
-  align-items: flex-end;
+.intro-text {
+  font-size: 28rpx;
+  line-height: 1.8;
+  color: #555;
+  text-align: justify;
 }
 
-/* 复制按钮 */
-.copy-button {
-  margin-top: 12rpx;
-  padding: 8rpx 20rpx;
-  background: linear-gradient(135deg, rgba(74, 144, 226, 0.1) 0%, rgba(53, 122, 189, 0.1) 100%);
-  border: 1rpx solid #4A90E2;
-  border-radius: 20rpx;
+.intro-motto {
+  font-weight: bold;
+  color: #4A90E2;
+  padding: 16rpx;
+  background: rgba(74, 144, 226, 0.1);
+  border-left: 4rpx solid #4A90E2;
+  border-radius: 8rpx;
+}
+
+/* 专业领域 */
+.expertise-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.expertise-item {
+  display: flex;
+  gap: 20rpx;
+  padding: 24rpx;
+  background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
+  border-radius: 12rpx;
+  border-left: 4rpx solid #4A90E2;
+}
+
+.expertise-number {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #4A90E2;
+  min-width: 60rpx;
+  text-align: center;
+}
+
+.expertise-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.expertise-name {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.expertise-desc {
+  font-size: 26rpx;
+  line-height: 1.6;
+  color: #666;
+}
+
+/* 办案理念 */
+.philosophy-section {
+  background: linear-gradient(135deg, #f0f9ff 0%, #fff 100%);
+}
+
+.philosophy-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.philosophy-quote {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+  padding: 24rpx;
+  background: white;
+  border-radius: 12rpx;
+  border-left: 4rpx solid #4A90E2;
+  box-shadow: 0 2rpx 8rpx rgba(74, 144, 226, 0.1);
+}
+
+.quote-cn {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #4A90E2;
+  text-align: center;
+}
+
+.quote-en {
+  font-size: 22rpx;
+  color: #999;
+  text-align: center;
+  font-style: italic;
+}
+
+.philosophy-text {
+  font-size: 28rpx;
+  line-height: 1.8;
+  color: #555;
+  text-align: justify;
+}
+
+/* 办公地址 */
+.address-section {
+  background: linear-gradient(135deg, #fff9e6 0%, #fff 100%);
+}
+
+.address-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.address-text {
+  font-size: 30rpx;
+  color: #333;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.contact-buttons {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 16rpx;
+}
+
+.contact-button {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 8rpx;
+  padding: 20rpx;
+  background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+  color: white;
+  font-size: 28rpx;
+  border-radius: 12rpx;
+  border: none;
+  box-shadow: 0 4rpx 12rpx rgba(74, 144, 226, 0.3);
+}
+
+.contact-button::after {
+  border: none;
+}
+
+.contact-button.secondary {
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  box-shadow: 0 4rpx 12rpx rgba(67, 233, 123, 0.3);
+}
+
+.button-icon {
+  font-size: 32rpx;
+}
+
+.button-text {
+  font-size: 26rpx;
+  font-weight: bold;
+}
+
+/* 咨询收费 */
+.consultation-fee {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12rpx;
+  padding: 20rpx;
+  margin: 20rpx 0;
+  background: linear-gradient(135deg, #fff9e6 0%, #fff 100%);
+  border-radius: 12rpx;
+  border: 2rpx solid #f0e6c8;
+}
+
+.fee-label {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.fee-amount {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #e74c3c;
+}
+
+/* AI助手提示 */
+.ai-tip {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin: 24rpx;
+  padding: 24rpx;
+  background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
+  border-radius: 16rpx;
+  border: 2rpx solid #e8f0ff;
   transition: all 0.3s;
-  cursor: pointer;
 }
 
-.copy-button:active {
-  transform: scale(0.95);
-  background: linear-gradient(135deg, rgba(74, 144, 226, 0.2) 0%, rgba(53, 122, 189, 0.2) 100%);
+.ai-tip:active {
+  transform: scale(0.98);
+  opacity: 0.8;
 }
 
-.copy-icon {
+.tip-icon {
+  font-size: 48rpx;
+}
+
+.tip-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.tip-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.tip-desc {
   font-size: 24rpx;
-}
-
-.user-row .copy-button {
-  align-self: flex-end;
-}
-
-.assistant-row .copy-button {
-  align-self: flex-start;
+  color: #999;
 }
 
 /* 版权信息 */
 .copyright-footer {
-  margin-top: 16rpx;
-  padding: 10rpx 20rpx;
+  padding: 30rpx 20rpx;
+  padding-bottom: calc(30rpx + env(safe-area-inset-bottom));
+  background: white;
+  border-top: 1rpx solid #e8ecef;
   text-align: center;
 }
 

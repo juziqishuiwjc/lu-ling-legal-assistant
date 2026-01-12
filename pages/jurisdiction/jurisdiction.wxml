@@ -1,0 +1,225 @@
+<!--pages/jurisdiction/jurisdiction.wxml-->
+<view class="container">
+  <!-- 标题 -->
+  <view class="page-header">
+    <text class="page-title">级别管辖查询</text>
+    <text class="page-subtitle">各级法院管辖范围标准</text>
+  </view>
+
+  <!-- Tab切换 -->
+  <view class="tab-container">
+    <view class="tab-item {{currentTab === 0 ? 'active' : ''}}" bindtap="switchTab" data-index="0">
+      <text class="tab-text">基层法院</text>
+    </view>
+    <view class="tab-item {{currentTab === 1 ? 'active' : ''}}" bindtap="switchTab" data-index="1">
+      <text class="tab-text">中级法院</text>
+    </view>
+    <view class="tab-item {{currentTab === 2 ? 'active' : ''}}" bindtap="switchTab" data-index="2">
+      <text class="tab-text">高级法院</text>
+    </view>
+    <view class="tab-item {{currentTab === 3 ? 'active' : ''}}" bindtap="switchTab" data-index="3">
+      <text class="tab-text">最高法院</text>
+    </view>
+  </view>
+
+  <!-- Tab内容 -->
+  <view class="tab-content">
+    <!-- 基层法院 -->
+    <view wx:if="{{currentTab === 0}}">
+      <view class="info-card">
+        <view class="info-header">
+          <text class="info-title">🏛️ 基层人民法院管辖范围</text>
+        </view>
+        <view class="info-content">
+          <view class="rule-item">
+            <text class="rule-title">第一审民事案件</text>
+            <text class="rule-desc">法律规定由其管辖的案件</text>
+          </view>
+          <view class="rule-item">
+            <text class="rule-title">一般民事案件</text>
+            <text class="rule-desc">争议金额在各省规定标准以下的案件</text>
+          </view>
+          <view class="rule-item">
+            <text class="rule-title">涉外案件</text>
+            <text class="rule-desc">争议金额在各省规定标准以下的涉外案件</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="tips-card">
+        <view class="tips-header">
+          <text class="tips-title">💡 管辖标准</text>
+        </view>
+        <view class="tips-content">
+          <text class="tips-text">• 各省标准不同：一般为上年度就业人员年平均工资的30%以下</text>
+          <text class="tips-text">• 北京、上海等地区标准较高</text>
+          <text class="tips-text">• 具体标准见"小额诉讼限额"功能</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 中级法院 -->
+    <view wx:if="{{currentTab === 1}}">
+      <view class="info-card">
+        <view class="info-header">
+          <text class="info-title">⚖️ 中级人民法院管辖范围</text>
+        </view>
+        <view class="info-content">
+          <view class="rule-item">
+            <text class="rule-title">重大涉外案件</text>
+            <text class="rule-desc">争议金额大、案情复杂的涉外民事案件</text>
+          </view>
+          <view class="rule-item">
+            <text class="rule-title">在本辖区有重大影响的案件</text>
+            <text class="rule-desc">涉及面广、群众关注度高的案件</text>
+          </view>
+          <view class="rule-item">
+            <text class="rule-title">最高人民法院指定管辖的案件</text>
+            <text class="rule-desc">最高法院确定由中院管辖的案件</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="standard-card">
+        <view class="standard-header">
+          <text class="standard-title">📊 标的额标准(参考)</text>
+        </view>
+        <view class="standard-content">
+          <view class="province-list">
+            <view class="province-item">
+              <text class="province-name">北京</text>
+              <text class="province-amount">5000万元-1亿元以下</text>
+            </view>
+            <view class="province-item">
+              <text class="province-name">上海</text>
+              <text class="province-amount">5000万元-1亿元以下</text>
+            </view>
+            <view class="province-item">
+              <text class="province-name">广东</text>
+              <text class="province-amount">5000万元-1亿元以下</text>
+            </view>
+            <view class="province-item">
+              <text class="province-name">江苏</text>
+              <text class="province-amount">5000万元-1亿元以下</text>
+            </view>
+            <view class="province-item">
+              <text class="province-name">浙江</text>
+              <text class="province-amount">5000万元-1亿元以下</text>
+            </view>
+            <view class="province-item">
+              <text class="province-name">其他省份</text>
+              <text class="province-amount">3000万元-1亿元以下</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 高级法院 -->
+    <view wx:if="{{currentTab === 2}}">
+      <view class="info-card">
+        <view class="info-header">
+          <text class="info-title">🏛️ 高级人民法院管辖范围</text>
+        </view>
+        <view class="info-content">
+          <view class="rule-item">
+            <text class="rule-title">在本辖区有重大影响的第一审民事案件</text>
+            <text class="rule-desc">涉及全省范围、影响重大的案件</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="standard-card">
+        <view class="standard-header">
+          <text class="standard-title">📊 标的额标准</text>
+        </view>
+        <view class="standard-content">
+          <view class="province-list">
+            <view class="province-item">
+              <text class="province-name">北京</text>
+              <text class="province-amount">1亿元-50亿元以下</text>
+            </view>
+            <view class="province-item">
+              <text class="province-name">上海</text>
+              <text class="province-amount">1亿元-50亿元以下</text>
+            </view>
+            <view class="province-item">
+              <text class="province-name">广东</text>
+              <text class="province-amount">1亿元-50亿元以下</text>
+            </view>
+            <view class="province-item">
+              <text class="province-name">其他省份</text>
+              <text class="province-amount">1亿元-50亿元以下</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 最高法院 -->
+    <view wx:if="{{currentTab === 3}}">
+      <view class="info-card">
+        <view class="info-header">
+          <text class="info-title">🏛️ 最高人民法院管辖范围</text>
+        </view>
+        <view class="info-content">
+          <view class="rule-item">
+            <text class="rule-title">在全国有重大影响的第一审民事案件</text>
+            <text class="rule-desc">涉及全国范围、影响极其重大的案件</text>
+          </view>
+          <view class="rule-item">
+            <text class="rule-title">认为应当由本院审理的案件</text>
+            <text class="rule-desc">最高法院决定由其管辖的案件</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="standard-card">
+        <view class="standard-header">
+          <text class="standard-title">📊 标的额标准</text>
+        </view>
+        <view class="standard-content">
+          <view class="amount-big">50亿元以上</view>
+          <view class="amount-desc">以及在全国有重大影响的案件</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 法律依据 -->
+  <view class="law-card">
+    <view class="law-header">
+      <text class="law-title">📜 法律依据</text>
+    </view>
+    <view class="law-content">
+      <text class="law-text">《民事诉讼法》第18条：</text>
+      <text class="law-text">中级人民法院管辖下列第一审民事案件：(一)重大涉外案件；(二)在本辖区有重大影响的案件；(三)最高人民法院确定由其管辖的案件。</text>
+      <view class="law-divider"></view>
+      <text class="law-text">《民事诉讼法》第19条：</text>
+      <text class="law-text">高级人民法院管辖在本辖区有重大影响的第一审民事案件。</text>
+      <view class="law-divider"></view>
+      <text class="law-text">《民事诉讼法》第20条：</text>
+      <text class="law-text">最高人民法院管辖下列第一审民事案件：(一)在全国有重大影响的案件；(二)认为应当由本院审理的案件。</text>
+      <view class="law-divider"></view>
+      <text class="law-text">《最高人民法院关于调整高级人民法院和中级人民法院管辖第一审民事案件标准的通知》（2019）</text>
+    </view>
+  </view>
+
+  <!-- 特殊管辖 -->
+  <view class="special-card">
+    <view class="special-header">
+      <text class="special-title">⚠️ 特殊管辖规定</text>
+    </view>
+    <view class="special-content">
+      <text class="special-text">1. 海事法院：专门管辖海事海商案件</text>
+      <text class="special-text">2. 知识产权法院：专门管辖知识产权案件</text>
+      <text class="special-text">3. 金融法院：专门管辖金融案件</text>
+      <text class="special-text">4. 互联网法院：专门管辖互联网案件</text>
+    </view>
+  </view>
+
+  <!-- 免责声明 -->
+  <view class="disclaimer">
+    <text class="disclaimer-text">⚠️ 各省标准可能不同，具体以当地法院公布为准</text>
+  </view>
+</view>

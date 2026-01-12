@@ -1,0 +1,185 @@
+<!--pages/interest-penalty/interest-penalty.wxml-->
+<view class="container">
+  <!-- 标题 -->
+  <view class="page-header">
+    <text class="page-title">利息/违约金/占用费计算</text>
+    <text class="page-subtitle">综合计算各类利息和违约金</text>
+  </view>
+
+  <!-- Tab切换 -->
+  <view class="tab-container">
+    <view class="tab-item {{currentTab === 0 ? 'active' : ''}}" bindtap="switchTab" data-index="0">
+      <text class="tab-text">违约金</text>
+    </view>
+    <view class="tab-item {{currentTab === 1 ? 'active' : ''}}" bindtap="switchTab" data-index="1">
+      <text class="tab-text">资金占用费</text>
+    </view>
+    <view class="tab-item {{currentTab === 2 ? 'active' : ''}}" bindtap="switchTab" data-index="2">
+      <text class="tab-text">逾期利息</text>
+    </view>
+  </view>
+
+  <!-- Tab内容：违约金 -->
+  <view class="tab-content" wx:if="{{currentTab === 0}}">
+    <view class="calculator-form">
+      <view class="form-item">
+        <text class="form-label">合同金额(元)</text>
+        <input class="form-input" type="digit" placeholder="请输入合同约定的金额" value="{{contractAmount}}" bindinput="onContractAmountInput" />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">违约金比例(%)</text>
+        <input class="form-input" type="digit" placeholder="合同约定的违约金比例" value="{{penaltyRate}}" bindinput="onPenaltyRateInput" />
+        <view class="input-tips">
+          <text class="tips-text">💡 通常为合同金额的10%-30%</text>
+        </view>
+      </view>
+
+      <button class="calculate-button" bindtap="calculatePenalty">计算违约金</button>
+    </view>
+
+    <view class="result-card" wx:if="{{penaltyResult}}">
+      <view class="result-header">
+        <text class="result-title">违约金计算结果</text>
+      </view>
+      <view class="result-content">
+        <view class="result-item">
+          <text class="result-label">合同金额</text>
+          <text class="result-value">¥{{contractAmount}}</text>
+        </view>
+        <view class="result-item">
+          <text class="result-label">违约金比例</text>
+          <text class="result-value">{{penaltyRate}}%</text>
+        </view>
+        <view class="result-divider"></view>
+        <view class="result-item result-highlight">
+          <text class="result-label">应付违约金</text>
+          <text class="result-value result-amount">¥{{penaltyResult}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Tab内容：资金占用费 -->
+  <view class="tab-content" wx:if="{{currentTab === 1}}">
+    <view class="calculator-form">
+      <view class="form-item">
+        <text class="form-label">占用资金金额(元)</text>
+        <input class="form-input" type="digit" placeholder="请输入占用的资金金额" value="{{occupyAmount}}" bindinput="onOccupyAmountInput" />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">年费率(%)</text>
+        <input class="form-input" type="digit" placeholder="通常为3.85%-6.375%" value="{{occupyRate}}" bindinput="onOccupyRateInput" />
+        <view class="input-tips">
+          <text class="tips-text">💡 可参照LPR的1-2倍或合同约定</text>
+        </view>
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">占用天数</text>
+        <input class="form-input" type="digit" placeholder="资金实际占用的天数" value="{{occupyDays}}" bindinput="onOccupyDaysInput" />
+      </view>
+
+      <button class="calculate-button" bindtap="calculateOccupy">计算占用费</button>
+    </view>
+
+    <view class="result-card" wx:if="{{occupyResult}}">
+      <view class="result-header">
+        <text class="result-title">资金占用费计算结果</text>
+      </view>
+      <view class="result-content">
+        <view class="result-item">
+          <text class="result-label">占用金额</text>
+          <text class="result-value">¥{{occupyAmount}}</text>
+        </view>
+        <view class="result-item">
+          <text class="result-label">占用时间</text>
+          <text class="result-value">{{occupyDays}}天</text>
+        </view>
+        <view class="result-item">
+          <text class="result-label">年费率</text>
+          <text class="result-value">{{occupyRate}}%</text>
+        </view>
+        <view class="result-divider"></view>
+        <view class="result-item result-highlight">
+          <text class="result-label">资金占用费</text>
+          <text class="result-value result-amount">¥{{occupyResult}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Tab内容：逾期利息 -->
+  <view class="tab-content" wx:if="{{currentTab === 2}}">
+    <view class="calculator-form">
+      <view class="form-item">
+        <text class="form-label">欠款金额(元)</text>
+        <input class="form-input" type="digit" placeholder="逾期未还的金额" value="{{overdueAmount}}" bindinput="onOverdueAmountInput" />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">年利率(%)</text>
+        <input class="form-input" type="digit" placeholder="合同约定或法定利率" value="{{overdueRate}}" bindinput="onOverdueRateInput" />
+        <view class="input-tips">
+          <text class="tips-text">💡 有合同按合同，无合同可参照LPR</text>
+        </view>
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">逾期天数</text>
+        <input class="form-input" type="digit" placeholder="从应还款日至实际还款日" value="{{overdueDays}}" bindinput="onOverdueDaysInput" />
+      </view>
+
+      <button class="calculate-button" bindtap="calculateOverdue">计算逾期利息</button>
+    </view>
+
+    <view class="result-card" wx:if="{{overdueResult}}">
+      <view class="result-header">
+        <text class="result-title">逾期利息计算结果</text>
+      </view>
+      <view class="result-content">
+        <view class="result-item">
+          <text class="result-label">欠款金额</text>
+          <text class="result-value">¥{{overdueAmount}}</text>
+        </view>
+        <view class="result-item">
+          <text class="result-label">逾期时间</text>
+          <text class="result-value">{{overdueDays}}天</text>
+        </view>
+        <view class="result-item">
+          <text class="result-label">年利率</text>
+          <text class="result-value">{{overdueRate}}%</text>
+        </view>
+        <view class="result-divider"></view>
+        <view class="result-item result-highlight">
+          <text class="result-label">逾期利息</text>
+          <text class="result-value result-amount">¥{{overdueResult}}</text>
+        </view>
+        <view class="result-item">
+          <text class="result-label">本息合计</text>
+          <text class="result-value">¥{{overdueTotal}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 法律依据 -->
+  <view class="law-card">
+    <view class="law-header">
+      <text class="law-title">📜 法律依据</text>
+    </view>
+    <view class="law-content">
+      <text class="law-text">《民法典》第577条：</text>
+      <text class="law-text">当事人一方不履行合同义务或者履行合同义务不符合约定的，应当承担继续履行、采取补救措施或者赔偿损失等违约责任。</text>
+      <view class="law-divider"></view>
+      <text class="law-text">《民法典》第585条：</text>
+      <text class="law-text">当事人可以约定一方违约时应当根据违约情况向对方支付一定数额的违约金，也可以约定因违约产生的损失赔偿额的计算方法。</text>
+    </view>
+  </view>
+
+  <!-- 免责声明 -->
+  <view class="disclaimer">
+    <text class="disclaimer-text">⚠️ 本计算结果仅供参考，具体以合同约定或法院认定为准</text>
+  </view>
+</view>

@@ -1,0 +1,113 @@
+<!--pages/delay-interest/delay-interest.wxml-->
+<view class="container">
+  <!-- 标题 -->
+  <view class="page-header">
+    <text class="page-title">迟延履行利息计算器</text>
+    <text class="page-subtitle">根据《民事诉讼法》计算加倍利息</text>
+  </view>
+
+  <!-- 计算器表单 -->
+  <view class="calculator-form">
+    <!-- 判决金额 -->
+    <view class="form-item">
+      <text class="form-label">判决金额(元)</text>
+      <input
+        class="form-input"
+        type="digit"
+        placeholder="请输入判决金额"
+        value="{{amount}}"
+        bindinput="onAmountInput"
+      />
+    </view>
+
+    <!-- 判决确定日期 -->
+    <view class="form-item">
+      <text class="form-label">判决确定日期</text>
+      <picker
+        class="form-picker"
+        mode="date"
+        value="{{judgmentDate}}"
+        bindchange="onJudgmentDateChange"
+      >
+        <view class="picker-view">
+          {{judgmentDate || '请选择日期'}}
+          <text class="picker-arrow">📅</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 实际履行日期 -->
+    <view class="form-item">
+      <text class="form-label">实际履行日期</text>
+      <picker
+        class="form-picker"
+        mode="date"
+        value="{{paymentDate}}"
+        bindchange="onPaymentDateChange"
+      >
+        <view class="picker-view">
+          {{paymentDate || '请选择日期'}}
+          <text class="picker-arrow">📅</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 利率说明 -->
+    <view class="info-tips">
+      <text class="tips-icon">💡</text>
+      <text class="tips-text">当前标准：日万分之1.75（年化6.375%）</text>
+    </view>
+
+    <!-- 计算按钮 -->
+    <button class="calculate-button" bindtap="calculate">计算利息</button>
+  </view>
+
+  <!-- 计算结果 -->
+  <view class="result-card" wx:if="{{result !== null}}">
+    <view class="result-header">
+      <text class="result-title">计算结果</text>
+    </view>
+    <view class="result-content">
+      <view class="result-item">
+        <text class="result-label">判决金额</text>
+        <text class="result-value">¥{{amount}}</text>
+      </view>
+      <view class="result-item">
+        <text class="result-label">迟延天数</text>
+        <text class="result-value">{{delayDays}}天</text>
+      </view>
+      <view class="result-item">
+        <text class="result-label">计算期间</text>
+        <text class="result-value small">{{judgmentDate}} 至 {{paymentDate}}</text>
+      </view>
+      <view class="result-divider"></view>
+      <view class="result-item result-highlight">
+        <text class="result-label">迟延履行利息</text>
+        <text class="result-value result-amount">¥{{result}}</text>
+      </view>
+      <view class="result-item result-total">
+        <text class="result-label">合计应支付</text>
+        <text class="result-value total-amount">¥{{totalAmount}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 法律依据 -->
+  <view class="law-card">
+    <view class="law-header">
+      <text class="law-title">📜 法律依据</text>
+    </view>
+    <view class="law-content">
+      <text class="law-text">《民事诉讼法》第260条：</text>
+      <text class="law-text">被执行人未按判决、裁定和其他法律文书指定的期间履行给付金钱义务的，应当加倍支付迟延履行期间的债务利息。</text>
+      <view class="law-divider"></view>
+      <text class="law-text">《计算规定》：</text>
+      <text class="law-text">加倍部分债务利息=债务人尚未清偿的生效法律文书确定的除一般债务利息之外的金钱债务×日万分之1.75×迟延履行期间。</text>
+    </view>
+  </view>
+
+  <!-- 免责声明 -->
+  <view class="disclaimer">
+    <text class="disclaimer-text">⚠️ 本计算结果仅供参考，实际金额以法院计算为准</text>
+  </view>
+</view>

@@ -1,0 +1,506 @@
+/* pages/bankruptcy-fee/bankruptcy-fee.wxss */
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  padding: 20rpx;
+  padding-bottom: 40rpx;
+}
+
+/* 标题区域 */
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding: 20rpx;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+}
+
+.nav-back {
+  display: flex;
+  align-items: center;
+  margin-right: 20rpx;
+  padding: 10rpx 15rpx;
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  border-radius: 12rpx;
+  color: #fff;
+  font-size: 28rpx;
+  box-shadow: 0 4rpx 15rpx rgba(168, 237, 234, 0.4);
+}
+
+.back-icon {
+  font-size: 40rpx;
+  margin-right: 5rpx;
+}
+
+.back-text {
+  font-size: 26rpx;
+  font-weight: 500;
+}
+
+.nav-title {
+  flex: 1;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #1a3a5c;
+  text-align: center;
+  margin-right: 140rpx;
+}
+
+/* 提示卡片 */
+.tips-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20rpx;
+  padding: 25rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+  border-left: 6rpx solid #26a69a;
+}
+
+.tips-title {
+  display: block;
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #26a69a;
+  margin-bottom: 10rpx;
+}
+
+.tips-text {
+  display: block;
+  font-size: 26rpx;
+  color: #555;
+  line-height: 1.8;
+}
+
+/* 表单区域 */
+.form-section {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #1a3a5c;
+  margin-bottom: 25rpx;
+  padding-bottom: 15rpx;
+  border-bottom: 2rpx solid #e0e0e0;
+}
+
+/* 类型选择 */
+.type-selector {
+  display: flex;
+  gap: 15rpx;
+}
+
+.type-item {
+  flex: 1;
+  padding: 20rpx;
+  background: #f5f5f5;
+  border-radius: 12rpx;
+  text-align: center;
+  border: 2rpx solid transparent;
+  transition: all 0.3s;
+}
+
+.type-item.active {
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  border-color: #26a69a;
+  box-shadow: 0 4rpx 15rpx rgba(38, 166, 154, 0.4);
+}
+
+.type-name {
+  font-size: 26rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.type-item.active .type-name {
+  color: #fff;
+}
+
+/* 表单项 */
+.form-item {
+  margin-bottom: 30rpx;
+}
+
+.form-label {
+  display: block;
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 15rpx;
+  font-weight: 500;
+}
+
+.form-input {
+  width: 100%;
+  padding: 20rpx;
+  background: #f5f5f5;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  color: #333;
+  box-sizing: border-box;
+  border: 2rpx solid transparent;
+  transition: all 0.3s;
+}
+
+.form-input:focus {
+  background: #fff;
+  border-color: #26a69a;
+  box-shadow: 0 0 0 4rpx rgba(38, 166, 154, 0.1);
+}
+
+.form-hint {
+  display: block;
+  font-size: 22rpx;
+  color: #999;
+  margin-top: 8rpx;
+}
+
+/* 单选框组 */
+.radio-group {
+  display: flex;
+  gap: 20rpx;
+}
+
+.radio-item {
+  display: flex;
+  align-items: center;
+  padding: 15rpx 20rpx;
+  background: #f5f5f5;
+  border-radius: 10rpx;
+  border: 2rpx solid transparent;
+  transition: all 0.3s;
+}
+
+.radio-item.active {
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  border-color: #26a69a;
+}
+
+.radio-icon {
+  font-size: 36rpx;
+  margin-right: 10rpx;
+}
+
+.radio-label {
+  font-size: 26rpx;
+  color: #333;
+}
+
+.radio-item.active .radio-label {
+  color: #fff;
+  font-weight: bold;
+}
+
+/* 信息卡片 */
+.info-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20rpx;
+  padding: 25rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+  border-left: 6rpx solid #26a69a;
+}
+
+.info-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #26a69a;
+  margin-bottom: 15rpx;
+}
+
+.info-item {
+  margin-bottom: 15rpx;
+}
+
+.info-label {
+  display: block;
+  font-size: 26rpx;
+  color: #26a69a;
+  font-weight: bold;
+  margin-bottom: 5rpx;
+}
+
+.info-value {
+  display: block;
+  font-size: 24rpx;
+  color: #555;
+  line-height: 1.8;
+  padding-left: 20rpx;
+}
+
+/* 按钮组 */
+.btn-group {
+  display: flex;
+  gap: 20rpx;
+  margin: 30rpx 0;
+}
+
+.btn-primary, .btn-secondary {
+  flex: 1;
+  height: 90rpx;
+  line-height: 90rpx;
+  border-radius: 45rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  border: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  color: #fff;
+  box-shadow: 0 8rpx 25rpx rgba(168, 237, 234, 0.4);
+}
+
+.btn-secondary {
+  background: #fff;
+  color: #26a69a;
+  border: 2rpx solid #26a69a;
+}
+
+/* 结果卡片 */
+.result-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+}
+
+.result-header {
+  margin-bottom: 25rpx;
+}
+
+.result-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #1a3a5c;
+}
+
+.result-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25rpx;
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  border-radius: 15rpx;
+  margin-bottom: 20rpx;
+}
+
+.result-label {
+  font-size: 30rpx;
+  color: #fff;
+  font-weight: bold;
+}
+
+.result-value {
+  font-size: 40rpx;
+  color: #fff;
+  font-weight: bold;
+}
+
+.result-divider {
+  height: 2rpx;
+  background: #e0e0e0;
+  margin: 20rpx 0;
+}
+
+/* 分段详情 */
+.result-section {
+  margin-top: 20rpx;
+}
+
+.result-subtitle {
+  display: block;
+  font-size: 28rpx;
+  color: #26a69a;
+  font-weight: bold;
+  margin-bottom: 15rpx;
+}
+
+.segment-list {
+  margin-top: 10rpx;
+}
+
+.segment-item {
+  background: #f5f5f5;
+  border-radius: 12rpx;
+  padding: 15rpx;
+  margin-bottom: 10rpx;
+}
+
+.segment-range {
+  font-size: 26rpx;
+  color: #26a69a;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+}
+
+.segment-detail {
+  display: flex;
+  flex-direction: column;
+  padding-left: 20rpx;
+}
+
+.segment-amount, .segment-rate, .segment-fee {
+  font-size: 24rpx;
+  color: #555;
+  margin-bottom: 5rpx;
+}
+
+/* 说明信息 */
+.result-notice {
+  display: flex;
+  align-items: flex-start;
+  padding: 20rpx;
+  background: #fff8e1;
+  border-radius: 12rpx;
+  border-left: 4rpx solid #ffc107;
+  margin-top: 20rpx;
+}
+
+.notice-icon {
+  font-size: 32rpx;
+  margin-right: 10rpx;
+}
+
+.notice-text {
+  flex: 1;
+  font-size: 24rpx;
+  color: #e65100;
+  line-height: 1.6;
+}
+
+.result-formula {
+  margin-top: 20rpx;
+  padding: 20rpx;
+  background: #f5f5f5;
+  border-radius: 12rpx;
+}
+
+.formula-title {
+  display: block;
+  font-size: 26rpx;
+  color: #26a69a;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+}
+
+.formula-text {
+  display: block;
+  font-size: 24rpx;
+  color: #555;
+  line-height: 1.8;
+}
+
+/* 标准卡片 */
+.standard-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20rpx;
+  padding: 25rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+  border-left: 6rpx solid #26a69a;
+}
+
+.standard-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #26a69a;
+  margin-bottom: 15rpx;
+}
+
+.standard-table {
+  border: 2rpx solid #e0e0e0;
+  border-radius: 12rpx;
+  overflow: hidden;
+}
+
+.table-header {
+  display: flex;
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+}
+
+.header-cell {
+  flex: 1;
+  padding: 15rpx;
+  font-size: 26rpx;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+  border-right: 1rpx solid rgba(255, 255, 255, 0.3);
+}
+
+.header-cell:last-child {
+  border-right: none;
+}
+
+.table-row {
+  display: flex;
+  border-top: 1rpx solid #e0e0e0;
+}
+
+.row-cell {
+  flex: 1;
+  padding: 12rpx;
+  font-size: 24rpx;
+  color: #333;
+  text-align: center;
+  border-right: 1rpx solid #e0e0e0;
+}
+
+.row-cell:last-child {
+  border-right: none;
+}
+
+.table-row:nth-child(odd) {
+  background: #fafafa;
+}
+
+/* 法律依据 */
+.legal-basis {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20rpx;
+  padding: 25rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+  border-left: 6rpx solid #26a69a;
+}
+
+.legal-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #26a69a;
+  margin-bottom: 15rpx;
+}
+
+.legal-text {
+  display: block;
+  font-size: 26rpx;
+  color: #555;
+  line-height: 2;
+  margin-bottom: 8rpx;
+  padding-left: 20rpx;
+}
+
+/* 免责声明 */
+.disclaimer {
+  background: rgba(255, 248, 240, 0.95);
+  border-radius: 20rpx;
+  padding: 25rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+  border-left: 6rpx solid #ff9800;
+}
+
+.disclaimer-text {
+  display: block;
+  font-size: 24rpx;
+  color: #e65100;
+  line-height: 1.8;
+}

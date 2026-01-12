@@ -1,0 +1,216 @@
+<!--pages/lawyer-fee/lawyer-fee.wxml-->
+<view class="container">
+  <!-- 标题 -->
+  <view class="page-header">
+    <text class="page-title">律师费计算器</text>
+    <text class="page-subtitle">江西吉泰律师事务所收费标准</text>
+  </view>
+
+  <!-- 重要提示 -->
+  <view class="warning-card">
+    <text class="warning-icon">⚠️</text>
+    <text class="warning-text">本计算器按照江西吉泰律师事务所收费标准（2020年版）计算。具体费用以与律师事务所协商确定的《委托代理合同》为准。</text>
+  </view>
+
+  <!-- 计算器表单 -->
+  <view class="calculator-form">
+    <!-- 案件类型 -->
+    <view class="form-item">
+      <text class="form-label">案件类型</text>
+      <picker class="form-picker" bindchange="onCaseTypeChange" value="{{caseTypeIndex}}" range="{{caseTypes}}">
+        <view class="picker-view">
+          {{caseTypes[caseTypeIndex]}}
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 刑事案件阶段选择 -->
+    <view class="form-item" wx:if="{{caseTypeIndex === 0}}">
+      <text class="form-label">诉讼阶段</text>
+      <picker class="form-picker" bindchange="onCriminalStageChange" value="{{criminalStageIndex}}" range="{{criminalStages}}">
+        <view class="picker-view">
+          {{criminalStages[criminalStageIndex]}}
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 行政案件阶段选择 -->
+    <view class="form-item" wx:if="{{caseTypeIndex === 3}}">
+      <text class="form-label">诉讼阶段</text>
+      <picker class="form-picker" bindchange="onAdminStageChange" value="{{adminStageIndex}}" range="{{adminStages}}">
+        <view class="picker-view">
+          {{adminStages[adminStageIndex]}}
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 涉及标的额（仅涉及财产的案件显示） -->
+    <view class="form-item" wx:if="{{needAmount}}">
+      <text class="form-label">涉及标的额(元) <text style="color: #ff6b6b;">*</text></text>
+      <input
+        class="form-input"
+        type="digit"
+        placeholder="请输入涉案金额"
+        value="{{amount}}"
+        bindinput="onAmountInput"
+      />
+      <view class="input-tips">
+        <text class="tips-text">💡 涉及财产案件按标的额分段累计收费</text>
+      </view>
+    </view>
+
+    <!-- 工作小时数（仅法律咨询显示） -->
+    <view class="form-item" wx:if="{{needHours}}">
+      <text class="form-label">工作小时数 <text style="color: #ff6b6b;">*</text></text>
+      <input
+        class="form-input"
+        type="digit"
+        placeholder="请输入咨询时长"
+        value="{{hours}}"
+        bindinput="onHoursInput"
+      />
+      <view class="input-tips">
+        <text class="tips-text">💡 不足1小时按1小时计费</text>
+      </view>
+    </view>
+
+    <!-- 小时费率（仅法律咨询显示） -->
+    <view class="form-item" wx:if="{{needHours}}">
+      <text class="form-label">小时费率(元/小时) <text style="color: #ff6b6b;">*</text></text>
+      <input
+        class="form-input"
+        type="digit"
+        placeholder="500-5000元/小时"
+        value="{{hourlyRate}}"
+        bindinput="onHourlyRateInput"
+      />
+      <view class="input-tips">
+        <text class="tips-text">💡 具体标准由律师确定</text>
+      </view>
+    </view>
+
+    <!-- 计算按钮 -->
+    <button class="calculate-button" bindtap="calculate">计算律师费</button>
+  </view>
+
+  <!-- 计算结果 -->
+  <view class="result-card" wx:if="{{result !== null}}">
+    <view class="result-header">
+      <text class="result-title">律师费参考</text>
+    </view>
+
+    <view class="result-content">
+      <!-- 案件类型 -->
+      <view class="result-item">
+        <text class="result-label">案件类型</text>
+        <text class="result-value">{{caseTypes[caseTypeIndex]}}</text>
+      </view>
+
+      <!-- 诉讼阶段（刑事案件/行政案件） -->
+      <view class="result-item" wx:if="{{caseTypeIndex === 0}}">
+        <text class="result-label">诉讼阶段</text>
+        <text class="result-value">{{criminalStages[criminalStageIndex]}}</text>
+      </view>
+      <view class="result-item" wx:if="{{caseTypeIndex === 3}}">
+        <text class="result-label">诉讼阶段</text>
+        <text class="result-value">{{adminStages[adminStageIndex]}}</text>
+      </view>
+
+      <!-- 标的额（涉及财产案件） -->
+      <view class="result-item" wx:if="{{result.baseAmount}}">
+        <text class="result-label">标的额</text>
+        <text class="result-value">¥{{result.baseAmount}}</text>
+      </view>
+
+      <view class="result-divider"></view>
+
+      <view class="result-item result-highlight">
+        <text class="result-label">律师费参考</text>
+        <text class="result-value result-amount">¥{{result.fee}}</text>
+      </view>
+
+      <!-- 收费范围 -->
+      <view class="result-item" wx:if="{{result.range}}">
+        <text class="result-label">收费范围</text>
+        <text class="result-value">{{result.range}}</text>
+      </view>
+
+      <!-- 计算说明 -->
+      <view class="result-formula" wx:if="{{result.formula}}">
+        <text class="formula-title">计算说明：</text>
+        <text class="formula-text">{{result.formula}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 收费标准说明 -->
+  <view class="info-card">
+    <view class="info-header">
+      <text class="info-title">📋 江西吉泰律师事务所收费标准（2020年版）</text>
+    </view>
+    <view class="info-content">
+      <view class="info-item">
+        <text class="info-title-mini">一、刑事案件</text>
+        <text class="info-text">• 侦查阶段：15000—60000元/件</text>
+        <text class="info-text">• 审查起诉阶段：15000—60000元/件</text>
+        <text class="info-text">• 一审阶段：20000—100000元/件</text>
+        <text class="info-text">• 二审阶段：20000—100000元/件</text>
+        <text class="info-text" style="color: #fa709a;">• 合伙人办理可上调5000元</text>
+      </view>
+      <view class="info-divider"></view>
+      <view class="info-item">
+        <text class="info-title-mini">二、民事诉讼</text>
+        <text class="info-text">• 不涉及财产：5000元/件</text>
+        <text class="info-text">• 涉及财产：按标的额分段累计（最高不超过标准3倍）</text>
+      </view>
+      <view class="info-divider"></view>
+      <view class="info-item">
+        <text class="info-title-mini">三、行政案件</text>
+        <text class="info-text">• 行政处理：5000元/件起</text>
+        <text class="info-text">• 复议阶段：10000-60000元/件</text>
+        <text class="info-text">• 一审、二审：20000-100000元/件</text>
+      </view>
+      <view class="info-divider"></view>
+      <view class="info-item">
+        <text class="info-title-mini">四、其他服务</text>
+        <text class="info-text">• 法律咨询：500-5000元/小时</text>
+        <text class="info-text">• 法律文书：1000-5000元/件</text>
+        <text class="info-text">• 法律顾问：20000-500000元/年</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 涉及财产案件分段标准 -->
+  <view class="rules-card">
+    <view class="rules-header">
+      <text class="rules-title">📊 涉及财产案件分段标准（吉泰所）</text>
+    </view>
+    <view class="rules-content">
+      <text class="rules-text">0-50,000元：5000元</text>
+      <text class="rules-text">50,001-100,000元：5%</text>
+      <text class="rules-text">100,001-1,000,000元：4%</text>
+      <text class="rules-text">1,000,001-5,000,000元：3%</text>
+      <text class="rules-text">5,000,001-10,000,000元：2%</text>
+      <text class="rules-text">10,000,001元以上部分：1%</text>
+    </view>
+  </view>
+
+  <!-- 法律依据 -->
+  <view class="legal-basis">
+    <text class="legal-title">📋 法律依据</text>
+    <text class="legal-text">1. 《中华人民共和国价格法》</text>
+    <text class="legal-text">2. 《中华人民共和国律师法》</text>
+    <text class="legal-text">3. 国家发改委、司法部《律师服务收费管理办法》</text>
+    <text class="legal-text">4. 《江西省律师服务收费管理办法》</text>
+    <text class="legal-text">5. 《江西省律师服务收费指导价标准（暂行）》</text>
+    <text class="legal-note">注：江西吉泰律师事务所收费标准（2020年7月8日起施行）</text>
+  </view>
+
+  <!-- 免责声明 -->
+  <view class="disclaimer">
+    <text class="disclaimer-text">⚠️ 免责声明：本计算结果仅供参考。具体律师费以与江西吉泰律师事务所协商确定的《委托代理合同》为准。案情复杂或有重大影响的案件可协商收费，最高不超过规定标准的3倍。</text>
+  </view>
+</view>

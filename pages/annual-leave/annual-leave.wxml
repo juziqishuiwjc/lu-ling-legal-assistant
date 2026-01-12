@@ -1,0 +1,182 @@
+<!--pages/annual-leave/annual-leave.wxml-->
+<view class="container">
+  <!-- 标题 -->
+  <view class="page-header">
+    <text class="page-title">带薪年休假计算器</text>
+    <text class="page-subtitle">根据《职工带薪年休假条例》计算</text>
+  </view>
+
+  <!-- 计算器表单 -->
+  <view class="calculator-form">
+    <!-- 累计工作年限 -->
+    <view class="form-item">
+      <text class="form-label">累计工作年限(年)</text>
+      <input
+        class="form-input"
+        type="digit"
+        placeholder="累计工作的年数(社会工龄)"
+        value="{{workYears}}"
+        bindinput="onWorkYearsInput"
+      />
+      <view class="input-tips">
+        <text class="tips-text">💡 累计工作年限=在不同单位的工作时间总和</text>
+      </view>
+    </view>
+
+    <!-- 本年度在职天数 -->
+    <view class="form-item">
+      <text class="form-label">本年度在职天数(天)</text>
+      <input
+        class="form-input"
+        type="digit"
+        placeholder="本年度在当前单位工作天数"
+        value="{{workDays}}"
+        bindinput="onWorkDaysInput"
+      />
+      <view class="input-tips">
+        <text class="tips-text">💡 新入职员工按在职天数折算，满1年才享有完整年假</text>
+      </view>
+    </view>
+
+    <!-- 未休年假天数 -->
+    <view class="form-item">
+      <text class="form-label">未休年假天数(天)</text>
+      <input
+        class="form-input"
+        type="digit"
+        placeholder="已休天数=0时为本年度总天数"
+        value="{{unspentDays}}"
+        bindinput="onUnspentDaysInput"
+      />
+      <view class="input-tips">
+        <text class="tips-text">💡 需支付的未休年假天数</text>
+      </view>
+    </view>
+
+    <!-- 日工资 -->
+    <view class="form-item">
+      <text class="form-label">日工资(元/天)</text>
+      <input
+        class="form-input"
+        type="digit"
+        placeholder="月工资÷21.75天"
+        value="{{dailyWage}}"
+        bindinput="onDailyWageInput"
+      />
+      <view class="input-tips">
+        <text class="tips-text">💡 日工资=月工资收入÷21.75天(月计薪天数)</text>
+      </view>
+    </view>
+
+    <!-- 是否离职 -->
+    <view class="form-item">
+      <text class="form-label">是否已离职</text>
+      <picker class="form-picker" bindchange="onResignChange" value="{{isResigned}}" range="{{resignOptions}}">
+        <view class="picker-view">
+          {{resignOptions[isResigned]}}
+          <text class="picker-arrow">></text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 计算按钮 -->
+    <button class="calculate-button" bindtap="calculate">计算年假</button>
+  </view>
+
+  <!-- 计算结果 -->
+  <view class="result-card" wx:if="{{result !== null}}">
+    <view class="result-header">
+      <text class="result-title">年假计算结果</text>
+    </view>
+
+    <view class="result-content">
+      <view class="result-item">
+        <text class="result-label">累计工作年限</text>
+        <text class="result-value">{{workYears}}年</text>
+      </view>
+
+      <view class="result-item">
+        <text class="result-label">法定年假天数</text>
+        <text class="result-value highlight">{{result.legalDays}}天</text>
+      </view>
+
+      <view class="result-item" wx:if="{{result.entitledDays !== result.legalDays}}">
+        <text class="result-label">本年度享有年假</text>
+        <text class="result-value">{{result.entitledDays}}天</text>
+      </view>
+
+      <view class="result-item">
+        <text class="result-label">未休年假天数</text>
+        <text class="result-value">{{unspentDays || result.legalDays}}天</text>
+      </view>
+
+      <view class="result-divider"></view>
+
+      <view class="result-item result-highlight">
+        <text class="result-label">应支付工资</text>
+        <text class="result-value result-amount">¥{{result.compensation}}</text>
+      </view>
+
+      <view class="result-formula">
+        <text class="formula-title">计算公式：</text>
+        <text class="formula-text">{{result.formula}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 年假标准说明 -->
+  <view class="info-card">
+    <view class="info-header">
+      <text class="info-title">📊 年假天数标准</text>
+    </view>
+    <view class="info-content">
+      <view class="level-list">
+        <view class="level-item">
+          <text class="level-grade">1-10年</text>
+          <text class="level-detail">5天年假</text>
+        </view>
+        <view class="level-item">
+          <text class="level-grade">10-20年</text>
+          <text class="level-detail">10天年假</text>
+        </view>
+        <view class="level-item">
+          <text class="level-grade">20年以上</text>
+          <text class="level-detail">15天年假</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 特殊规定 -->
+  <view class="rules-card">
+    <view class="rules-header">
+      <text class="rules-title">📋 重要规定</text>
+    </view>
+    <view class="rules-content">
+      <text class="rules-text">1. 新入职职工：当年度年假=（当年度在本单位剩余日历天数÷365天）×职工本人全年应当享受的年假天数</text>
+      <text class="rules-text">2. 离职工资：未休年假天数=（当年度在本单位已过日历天数÷365天）×职工本人全年应当享受的年假天数-已休年假天数</text>
+      <text class="rules-text">3. 法定休假日、休息日：不计入年假的假期</text>
+      <text class="rules-text">4. 寒暑假：教师享受的寒暑假多于年假天数的，不享受当年的年假</text>
+      <text class="rules-text">5. 300%工资：未休年假的，单位应支付日工资收入的300%</text>
+    </view>
+  </view>
+
+  <!-- 法律依据 -->
+  <view class="law-card">
+    <view class="law-header">
+      <text class="law-title">📜 法律依据</text>
+    </view>
+    <view class="law-content">
+      <text class="law-text">《职工带薪年休假条例》第3条：</text>
+      <text class="law-text">职工累计工作已满1年不满10年的，年休假5天；已满10年不满20年的，年休假10天；已满20年的，年休假15天。</text>
+      <view class="law-divider"></view>
+      <text class="law-text">《企业职工带薪年休假实施办法》第10条：</text>
+      <text class="law-text">用人单位经职工同意不安排年休假或者安排职工年休假天数少于应休年休假天数，应当在本年度内对职工应休未休年休假天数，按照其日工资收入的300%支付未休年休假工资报酬，其中包含用人单位支付职工正常工作期间的工资收入。</text>
+    </view>
+  </view>
+
+  <!-- 免责声明 -->
+  <view class="disclaimer">
+    <text class="disclaimer-text">⚠️ 本计算结果仅供参考，具体以劳动仲裁委员会或法院认定为准</text>
+  </view>
+</view>

@@ -1,0 +1,310 @@
+<!--pages/work-injury/work-injury.wxml-->
+<view class="container">
+  <!-- 标题 -->
+  <view class="page-header">
+    <text class="page-title">工伤赔偿计算器</text>
+    <text class="page-subtitle">根据《工伤保险条例》和《江西省工伤保险实施办法》计算</text>
+  </view>
+
+  <!-- 计算器表单 -->
+  <view class="calculator-form">
+    <!-- 伤残等级 -->
+    <view class="form-item">
+      <text class="form-label">伤残等级</text>
+      <picker class="form-picker" bindchange="onLevelChange" value="{{levelIndex}}" range="{{levels}}">
+        <view class="picker-view">
+          {{levels[levelIndex]}}
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 本人工资 -->
+    <view class="form-item">
+      <text class="form-label">本人工资(元/月)</text>
+      <input
+        class="form-input"
+        type="digit"
+        placeholder="请输入工伤前的平均月缴费工资"
+        value="{{salary}}"
+        bindinput="onSalaryInput"
+      />
+      <view class="input-tips">
+        <text class="tips-text">💡 用于计算一次性伤残补助金和就业补助金</text>
+      </view>
+    </view>
+
+    <!-- 是否解除劳动关系 -->
+    <view class="form-item">
+      <text class="form-label">是否解除劳动关系</text>
+      <picker class="form-picker" bindchange="onResignChange" value="{{resignIndex}}" range="{{resignOptions}}">
+        <view class="picker-view">
+          {{resignOptions[resignIndex]}}
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 统筹地区工资（解除劳动关系时需要） -->
+    <view class="form-item" wx:if="{{isResigned}}">
+      <text class="form-label">统筹地区职工平均工资(元/月) <text style="color: #ff6b6b;">*</text></text>
+      <input
+        class="form-input"
+        type="digit"
+        placeholder="用于计算一次性工伤医疗补助金"
+        value="{{avgSalary}}"
+        bindinput="onAvgSalaryInput"
+      />
+      <view class="input-tips">
+        <text class="tips-text">💡 江西省2023年在岗职工月平均工资：7895元</text>
+      </view>
+    </view>
+
+    <!-- 性别（解除劳动关系且五至十级时需要） -->
+    <view class="form-item" wx:if="{{isResigned && levelIndex <= 5}}">
+      <text class="form-label">性别 <text style="color: #ff6b6b;">*</text></text>
+      <picker class="form-picker" bindchange="onGenderChange" value="{{genderIndex}}" range="{{genderOptions}}">
+        <view class="picker-view">
+          {{genderOptions[genderIndex]}}
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 女职工类型（解除劳动关系且五至十级且为女性时需要） -->
+    <view class="form-item" wx:if="{{isResigned && levelIndex <= 5 && genderIndex === 1}}">
+      <text class="form-label">女职工类型</text>
+      <picker class="form-picker" bindchange="onFemaleTypeChange" value="{{femaleTypeIndex}}" range="{{femaleTypeOptions}}">
+        <view class="picker-view">
+          {{femaleTypeOptions[femaleTypeIndex]}}
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+      <view class="input-tips">
+        <text class="tips-text">💡 管理/技术岗位55岁退休，工人岗位50岁退休</text>
+      </view>
+    </view>
+
+    <!-- 出生年月（解除劳动关系且五至十级时需要） -->
+    <view class="form-item" wx:if="{{isResigned && levelIndex <= 5}}">
+      <text class="form-label">出生年月 <text style="color: #ff6b6b;">*</text></text>
+      <view class="birth-date-inputs">
+        <input
+          class="form-input-short"
+          type="number"
+          placeholder="年份（如：1985）"
+          value="{{birthYear}}"
+          bindinput="onBirthYearInput"
+        />
+        <text class="input-separator">年</text>
+        <input
+          class="form-input-short"
+          type="number"
+          placeholder="月份（1-12）"
+          value="{{birthMonth}}"
+          bindinput="onBirthMonthInput"
+        />
+        <text class="input-separator">月</text>
+      </view>
+      <view class="input-tips">
+        <text class="tips-text">💡 根据国务院渐进式延迟退休办法计算您的退休年龄</text>
+      </view>
+    </view>
+
+    <!-- 是否患职业病（解除劳动关系时需要） -->
+    <view class="form-item" wx:if="{{isResigned}}">
+      <text class="form-label">是否患职业病</text>
+      <picker class="form-picker" bindchange="onOccupationalDiseaseChange" value="{{occupationalDiseaseIndex}}" range="{{occupationalDiseaseOptions}}">
+        <view class="picker-view">
+          {{occupationalDiseaseOptions[occupationalDiseaseIndex]}}
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+      <view class="input-tips">
+        <text class="tips-text">💡 患职业病的，一次性工伤医疗补助金增发30%</text>
+      </view>
+    </view>
+
+    <!-- 计算按钮 -->
+    <button class="calculate-button" bindtap="calculate">计算赔偿金额</button>
+  </view>
+
+  <!-- 计算结果 -->
+  <view class="result-card" wx:if="{{result !== null}}">
+    <view class="result-header">
+      <text class="result-title">赔偿明细</text>
+    </view>
+
+    <view class="result-content">
+      <!-- 一次性伤残补助金 -->
+      <view class="result-item">
+        <text class="result-label">一次性伤残补助金</text>
+        <view class="result-value-group">
+          <text class="result-value">¥{{result.disabilityGrant}}</text>
+          <text class="result-desc">{{result.disabilityGrantDesc}}</text>
+        </view>
+      </view>
+
+      <!-- 一次性工伤医疗补助金(解除劳动关系时) -->
+      <view class="result-item" wx:if="{{isResigned}}">
+        <text class="result-label">一次性工伤医疗补助金</text>
+        <view class="result-value-group">
+          <text class="result-value">¥{{result.medicalGrant}}</text>
+          <text class="result-desc">{{result.medicalGrantDesc}}</text>
+        </view>
+      </view>
+
+      <!-- 一次性伤残就业补助金(解除劳动关系时) -->
+      <view class="result-item" wx:if="{{isResigned}}">
+        <text class="result-label">一次性伤残就业补助金</text>
+        <view class="result-value-group">
+          <text class="result-value">¥{{result.employmentGrant}}</text>
+          <text class="result-desc">{{result.employmentGrantDesc}}</text>
+        </view>
+      </view>
+
+      <view class="result-divider"></view>
+
+      <!-- 合计 -->
+      <view class="result-item result-highlight">
+        <text class="result-label">赔偿总额</text>
+        <text class="result-value result-amount">¥{{result.total}}</text>
+      </view>
+
+      <!-- 退休年龄信息（解除劳动关系且五至十级时显示） -->
+      <view class="retire-info-box" wx:if="{{isResigned && levelIndex <= 5}}">
+        <view class="retire-info-title">📅 您的退休年龄信息</view>
+        <view class="retire-info-content" wx:if="{{calculatedRetireInfo}}">
+          <view class="retire-info-item">
+            <text class="retire-info-label">原法定退休年龄</text>
+            <text class="retire-info-value">{{calculatedRetireInfo.originalAge}}周岁</text>
+          </view>
+          <view class="retire-info-item">
+            <text class="retire-info-label">新法定退休年龄</text>
+            <text class="retire-info-value highlight">{{calculatedRetireInfo.newAge}}周岁</text>
+          </view>
+          <view class="retire-info-item">
+            <text class="retire-info-label">预计退休时间</text>
+            <text class="retire-info-value">{{calculatedRetireInfo.retireDate}}</text>
+          </view>
+          <view class="retire-info-item">
+            <text class="retire-info-label">距退休年限</text>
+            <text class="retire-info-value" wx:if="{{calculatedRetireInfo.yearsToRetire > 0}}">约{{calculatedRetireInfo.yearsToRetire}}年</text>
+            <text class="retire-info-value" wx:else="">已超过退休年龄</text>
+          </view>
+        </view>
+        <view class="retire-info-error" wx:else>
+          <text class="error-text">⚠️ 请输入出生年月以计算退休年龄</text>
+        </view>
+        <view class="retire-info-tips">
+          <text class="tips-text">💡 根据《国务院关于渐进式延迟法定退休年龄的办法》（2025年1月1日起实施）计算</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 伤残等级说明 -->
+  <view class="info-card">
+    <view class="info-header">
+      <text class="info-title">📊 伤残等级赔偿标准</text>
+    </view>
+    <view class="info-content">
+      <view class="level-list">
+        <view class="level-item">
+          <text class="level-grade">一级</text>
+          <text class="level-detail">27个月工资</text>
+        </view>
+        <view class="level-item">
+          <text class="level-grade">二级</text>
+          <text class="level-detail">25个月工资</text>
+        </view>
+        <view class="level-item">
+          <text class="level-grade">三级</text>
+          <text class="level-detail">23个月工资</text>
+        </view>
+        <view class="level-item">
+          <text class="level-grade">四级</text>
+          <text class="level-detail">21个月工资</text>
+        </view>
+        <view class="level-item">
+          <text class="level-grade">五级</text>
+          <text class="level-detail">18个月工资</text>
+        </view>
+        <view class="level-item">
+          <text class="level-grade">六级</text>
+          <text class="level-detail">16个月工资</text>
+        </view>
+        <view class="level-item">
+          <text class="level-grade">七级</text>
+          <text class="level-detail">13个月工资</text>
+        </view>
+        <view class="level-item">
+          <text class="level-grade">八级</text>
+          <text class="level-detail">11个月工资</text>
+        </view>
+        <view class="level-item">
+          <text class="level-grade">九级</text>
+          <text class="level-detail">9个月工资</text>
+        </view>
+        <view class="level-item">
+          <text class="level-grade">十级</text>
+          <text class="level-detail">7个月工资</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 江西省标准说明 -->
+  <view class="info-card">
+    <view class="info-header">
+      <text class="info-title">📋 江西省工伤赔偿标准（2023年修订）</text>
+    </view>
+    <view class="info-content">
+      <view class="info-item">
+        <text class="info-title-mini">一次性工伤医疗补助金（五级至十级）</text>
+        <text class="info-text">• 五级：21个月</text>
+        <text class="info-text">• 六级：18个月</text>
+        <text class="info-text">• 七级：14个月</text>
+        <text class="info-text">• 八级：11个月</text>
+        <text class="info-text">• 九级：8个月</text>
+        <text class="info-text">• 十级：5个月</text>
+        <text class="info-text" style="color: #fa709a;">• 患职业病：增发30%</text>
+      </view>
+      <view class="info-divider"></view>
+      <view class="info-item">
+        <text class="info-title-mini">一次性伤残就业补助金（五级至十级）</text>
+        <text class="info-text">• 五级：32个月</text>
+        <text class="info-text">• 六级：28个月</text>
+        <text class="info-text">• 七级：18个月</text>
+        <text class="info-text">• 八级：13个月</text>
+        <text class="info-text">• 九级：9个月</text>
+        <text class="info-text">• 十级：6个月</text>
+        <text class="info-text" style="color: #fa709a;">• 距退休不足5年：按比例支付</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 法律依据 -->
+  <view class="law-card">
+    <view class="law-header">
+      <text class="law-title">📜 法律依据</text>
+    </view>
+    <view class="law-content">
+      <text class="law-text">1. 《工伤保险条例》第35-37条</text>
+      <text class="law-text">2. 《江西省工伤保险实施办法》第二十二条（2023年修订）</text>
+      <text class="law-text">3. 《国务院关于渐进式延迟法定退休年龄的办法》（2025年1月1日起实施）</text>
+      <view class="law-divider"></view>
+      <text class="law-text">职工因工致残被鉴定为一级至十级伤残的，享受一次性伤残补助金。劳动合同期满终止或者职工本人提出解除劳动合同的，由工伤保险基金支付一次性工伤医疗补助金，由用人单位支付一次性伤残就业补助金。</text>
+      <view class="law-divider"></view>
+      <text class="law-text" style="color: #fa709a;">渐进式延迟退休规定：</text>
+      <text class="law-text">• 男职工：从60岁逐步延迟至63岁（每4个月延迟1个月）</text>
+      <text class="law-text">• 女职工（管理/技术）：从55岁逐步延迟至58岁（每4个月延迟1个月）</text>
+      <text class="law-text">• 女职工（工人）：从50岁逐步延迟至55岁（每2个月延迟1个月）</text>
+    </view>
+  </view>
+
+  <!-- 免责声明 -->
+  <view class="disclaimer">
+    <text class="disclaimer-text">⚠️ 本计算结果仅供参考，具体金额以工伤认定和劳动能力鉴定结论为准。建议咨询专业律师或当地社保部门。</text>
+  </view>
+</view>

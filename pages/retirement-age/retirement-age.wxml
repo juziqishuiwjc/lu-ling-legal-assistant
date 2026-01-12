@@ -1,0 +1,198 @@
+<!--pages/retire-age/retire-age.wxml-->
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">延迟退休年龄计算器</text>
+    <text class="page-subtitle">根据《国务院关于渐进式延迟法定退休年龄的办法》（2025年1月1日起实施）</text>
+  </view>
+
+  <!-- 重要提示 -->
+  <view class="warning-card">
+    <text class="warning-icon">⚠️</text>
+    <text class="warning-text">本计算器按照国务院最新政策计算延迟退休年龄。适用于2025年1月1日及以后达到原法定退休年龄的人员。</text>
+  </view>
+
+  <!-- 计算器表单 -->
+  <view class="calculator-form">
+    <!-- 性别 -->
+    <view class="form-item">
+      <text class="form-label">性别 <text style="color: #ff6b6b;">*</text></text>
+      <picker class="form-picker" bindchange="onGenderChange" value="{{genderIndex}}" range="{{genderOptions}}">
+        <view class="picker-view">
+          {{genderOptions[genderIndex]}}
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 女职工类型 -->
+    <view class="form-item" wx:if="{{genderIndex === 1}}">
+      <text class="form-label">女职工类型</text>
+      <picker class="form-picker" bindchange="onFemaleTypeChange" value="{{femaleTypeIndex}}" range="{{femaleTypeOptions}}">
+        <view class="picker-view">
+          {{femaleTypeOptions[femaleTypeIndex]}}
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+      <view class="input-tips">
+        <text class="tips-text">💡 管理/技术岗位原55岁退休，工人岗位原50岁退休</text>
+      </view>
+    </view>
+
+    <!-- 出生日期 -->
+    <view class="form-item">
+      <text class="form-label">出生年月 <text style="color: #ff6b6b;">*</text></text>
+      <view class="birth-date-inputs">
+        <input
+          class="form-input-short"
+          type="number"
+          placeholder="年份（如：1985）"
+          value="{{birthYear}}"
+          bindinput="onBirthYearInput"
+        />
+        <text class="input-separator">年</text>
+        <input
+          class="form-input-short"
+          type="number"
+          placeholder="月份（1-12）"
+          value="{{birthMonth}}"
+          bindinput="onBirthMonthInput"
+        />
+        <text class="input-separator">月</text>
+      </view>
+      <view class="input-tips">
+        <text class="tips-text">💡 请输入您的准确出生年月，系统将自动计算您的退休年龄</text>
+      </view>
+    </view>
+
+    <!-- 计算按钮 -->
+    <button class="calculate-button" bindtap="onCalculate">计算我的退休年龄</button>
+  </view>
+
+  <!-- 计算结果 -->
+  <view class="result-card" wx:if="{{result !== null}}">
+    <view class="result-header">
+      <text class="result-title">🎯 您的退休年龄信息</text>
+    </view>
+
+    <view class="result-content">
+      <!-- 原退休年龄 -->
+      <view class="result-item">
+        <text class="result-label">原法定退休年龄</text>
+        <text class="result-value">{{result.originalAge}}周岁</text>
+      </view>
+
+      <!-- 新退休年龄 -->
+      <view class="result-item highlight">
+        <text class="result-label">新法定退休年龄</text>
+        <text class="result-value big">{{result.newAge}}周岁</text>
+      </view>
+
+      <!-- 延迟时长 -->
+      <view class="result-item">
+        <text class="result-label">延迟时长</text>
+        <text class="result-value delay" wx:if="{{result.delayMonths > 0}}">
+          {{result.delayYears}}年{{result.delayRemainingMonths > 0 ? result.delayRemainingMonths + '个月' : ''}}
+        </text>
+        <text class="result-value" wx:else>无延迟</text>
+      </view>
+
+      <!-- 预计退休时间 -->
+      <view class="result-item">
+        <text class="result-label">预计退休时间</text>
+        <text class="result-value date">{{result.retireDate}}</text>
+      </view>
+
+      <view class="result-divider"></view>
+
+      <!-- 距退休年限 -->
+      <view class="result-item highlight">
+        <text class="result-label">距退休年限</text>
+        <text class="result-value big" wx:if="{{result.yearsToRetire > 0}}">
+          约{{result.yearsToRetire}}年（{{result.monthsToRetire}}个月）
+        </text>
+        <text class="result-value big" wx:else>已达到或超过退休年龄</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 延迟退休政策说明 -->
+  <view class="info-card">
+    <view class="info-header">
+      <text class="info-title">📋 渐进式延迟退休政策</text>
+    </view>
+    <view class="info-content">
+      <view class="policy-item">
+        <text class="policy-title">男职工</text>
+        <text class="policy-text">原法定退休年龄：60周岁</text>
+        <text class="policy-text">新法定退休年龄：63周岁</text>
+        <text class="policy-text highlight">延迟方式：每4个月延迟1个月</text>
+      </view>
+
+      <view class="info-divider"></view>
+
+      <view class="policy-item">
+        <text class="policy-title">女职工（管理/技术岗位）</text>
+        <text class="policy-text">原法定退休年龄：55周岁</text>
+        <text class="policy-text">新法定退休年龄：58周岁</text>
+        <text class="policy-text highlight">延迟方式：每4个月延迟1个月</text>
+      </view>
+
+      <view class="info-divider"></view>
+
+      <view class="policy-item">
+        <text class="policy-title">女职工（工人岗位）</text>
+        <text class="policy-text">原法定退休年龄：50周岁</text>
+        <text class="policy-text">新法定退休年龄：55周岁</text>
+        <text class="policy-text highlight">延迟方式：每2个月延迟1个月</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 实施时间说明 -->
+  <view class="notice-card">
+    <view class="notice-header">
+      <text class="notice-title">📅 实施时间</text>
+    </view>
+    <view class="notice-content">
+      <text class="notice-text">• 本办法自2025年1月1日起实施</text>
+      <text class="notice-text">• 2025年1月1日后达到原法定退休年龄的人员适用</text>
+      <text class="notice-text">• 将逐步用15年时间，将法定退休年龄延迟至新标准</text>
+    </view>
+  </view>
+
+  <!-- 弹性退休说明 -->
+  <view class="flex-card">
+    <view class="flex-header">
+      <text class="flex-title">🔄 弹性退休</text>
+    </view>
+    <view class="flex-content">
+      <text class="flex-text">• 职工达到最低缴费年限，可以自愿选择弹性提前退休，提前时间最长不超过三年</text>
+      <text class="flex-text">• 职工达到法定退休年龄，可以弹性延迟退休，延迟时间最长不超过三年</text>
+      <text class="flex-text highlight">• 实施中不得违背职工意愿强制选择退休年龄</text>
+    </view>
+  </view>
+
+  <!-- 法律依据 -->
+  <view class="law-card">
+    <view class="law-header">
+      <text class="law-title">📜 法律依据</text>
+    </view>
+    <view class="law-content">
+      <text class="law-text">《国务院关于渐进式延迟法定退休年龄的办法》</text>
+      <text class="law-text">2025年1月1日起实施</text>
+      <view class="law-divider"></view>
+      <text class="law-text">坚持小步调整、弹性实施、分类推进、统筹兼顾的原则</text>
+    </view>
+  </view>
+
+  <!-- 免责声明 -->
+  <view class="disclaimer">
+    <text class="disclaimer-text">⚠️ 本计算结果仅供参考，具体以人力资源和社会保障部门官方认定为准。建议咨询当地社保部门确认您的退休年龄。</text>
+  </view>
+
+  <!-- 版权信息 -->
+  <view class="copyright-footer">
+    <text class="copyright-text">© 2026 王吉成律师 版权所有 | 江西吉泰律师事务所</text>
+  </view>
+</view>

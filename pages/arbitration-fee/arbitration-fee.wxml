@@ -1,0 +1,128 @@
+<!--pages/arbitration-fee/arbitration-fee.wxml-->
+<view class="container">
+  <!-- 标题 -->
+  <view class="page-header">
+    <text class="page-title">仲裁费用计算器</text>
+    <text class="page-subtitle">根据《仲裁委员会仲裁收费办法》计算</text>
+  </view>
+
+  <!-- 计算器表单 -->
+  <view class="calculator-form">
+    <!-- 仲裁请求金额 -->
+    <view class="form-item">
+      <text class="form-label">仲裁请求金额(元)</text>
+      <input
+        class="form-input"
+        type="digit"
+        placeholder="请输入争议金额"
+        value="{{amount}}"
+        bindinput="onAmountInput"
+      />
+    </view>
+
+    <!-- 案件类型 -->
+    <view class="form-item">
+      <text class="form-label">案件类型</text>
+      <picker class="form-picker" bindchange="onCaseTypeChange" value="{{caseTypeIndex}}" range="{{caseTypes}}">
+        <view class="picker-view">
+          {{caseTypes[caseTypeIndex]}}
+          <text class="picker-arrow">></text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 计算按钮 -->
+    <button class="calculate-button" bindtap="calculate">计算仲裁费</button>
+  </view>
+
+  <!-- 计算结果 -->
+  <view class="result-card" wx:if="{{result !== null}}">
+    <view class="result-header">
+      <text class="result-title">仲裁费用计算结果</text>
+    </view>
+
+    <view class="result-content">
+      <view class="result-item">
+        <text class="result-label">争议金额</text>
+        <text class="result-value">¥{{amount}}</text>
+      </view>
+
+      <view class="result-item" wx:if="{{caseTypeIndex === 0}}">
+        <text class="result-label">案件受理费</text>
+        <text class="result-value">¥{{result.acceptanceFee}}</text>
+      </view>
+
+      <view class="result-item" wx:if="{{caseTypeIndex === 0}}">
+        <text class="result-label">案件处理费</text>
+        <text class="result-value">¥{{result.processingFee}}</text>
+      </view>
+
+      <view class="result-divider"></view>
+
+      <view class="result-item result-highlight">
+        <text class="result-label">仲裁费总额</text>
+        <text class="result-value result-amount">¥{{result.total}}</text>
+      </view>
+
+      <view class="result-formula">
+        <text class="formula-title">计算说明：</text>
+        <text class="formula-text">{{result.formula}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 费用标准 -->
+  <view class="standard-card">
+    <view class="standard-header">
+      <text class="standard-title">📊 仲裁费用标准</text>
+    </view>
+    <view class="standard-content">
+      <text class="standard-title-mini">劳动争议仲裁：</text>
+      <text class="standard-text">• 劳动争议仲裁不收费</text>
+      <text class="standard-text">• 免费仲裁，保障劳动者权益</text>
+
+      <view class="standard-divider"></view>
+
+      <text class="standard-title-mini">民商事仲裁：</text>
+      <view class="fee-list">
+        <text class="fee-item">1000元以下：每件50-100元</text>
+        <text class="fee-item">1001-50000元：按3-5%收取</text>
+        <text class="fee-item">50001-100000元：按2-4%收取</text>
+        <text class="fee-item">100001-200000元：按1-3%收取</text>
+        <text class="fee-item">200001-500000元：按0.5-2%收取</text>
+        <text class="fee-item">500001-1000000元：按0.3-1%收取</text>
+        <text class="fee-item">1000001元以上：按0.1-0.5%收取</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 优势说明 -->
+  <view class="advantage-card">
+    <view class="advantage-header">
+      <text class="advantage-title">⚡ 仲裁优势</text>
+    </view>
+    <view class="advantage-content">
+      <text class="advantage-text">✓ 一裁终局，快速高效</text>
+      <text class="advantage-text">✓ 保密性强，保护隐私</text>
+      <text class="advantage-text">✓ 专业性强，专家裁决</text>
+      <text class="advantage-text">✓ 灵活便捷，程序简化</text>
+    </view>
+  </view>
+
+  <!-- 法律依据 -->
+  <view class="law-card">
+    <view class="law-header">
+      <text class="law-title">📜 法律依据</text>
+    </view>
+    <view class="law-content">
+      <text class="law-text">《仲裁委员会仲裁收费办法》</text>
+      <text class="law-text">《劳动争议调解仲裁法》第53条：</text>
+      <text class="law-text">劳动争议仲裁不收费。劳动争议仲裁委员会的经费由财政予以保障。</text>
+    </view>
+  </view>
+
+  <!-- 免责声明 -->
+  <view class="disclaimer">
+    <text class="disclaimer-text">⚠️ 本计算结果仅供参考，具体以仲裁委员会核定为准</text>
+  </view>
+</view>

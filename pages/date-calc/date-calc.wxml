@@ -1,0 +1,209 @@
+<!--pages/date-calc/date-calc.wxml-->
+<view class="container">
+  <!-- 标题 -->
+  <view class="page-header">
+    <text class="page-title">日期推算工具</text>
+    <text class="page-subtitle">快速计算法律相关日期</text>
+  </view>
+
+  <!-- Tab切换 -->
+  <view class="tab-container">
+    <view class="tab-item {{currentTab === 0 ? 'active' : ''}}" bindtap="switchTab" data-index="0">
+      <text class="tab-text">天数加减</text>
+    </view>
+    <view class="tab-item {{currentTab === 1 ? 'active' : ''}}" bindtap="switchTab" data-index="1">
+      <text class="tab-text">月数加减</text>
+    </view>
+    <view class="tab-item {{currentTab === 2 ? 'active' : ''}}" bindtap="switchTab" data-index="2">
+      <text class="tab-text">间隔计算</text>
+    </view>
+  </view>
+
+  <!-- Tab内容：天数加减 -->
+  <view class="tab-content" wx:if="{{currentTab === 0}}">
+    <view class="calculator-form">
+      <view class="form-item">
+        <text class="form-label">起始日期</text>
+        <picker class="form-picker" mode="date" value="{{startDate1}}" bindchange="onStartDate1Change">
+          <view class="picker-view">
+            {{startDate1 || '请选择日期'}}
+            <text class="picker-arrow">📅</text>
+          </view>
+        </picker>
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">天数</text>
+        <input
+          class="form-input"
+          type="digit"
+          placeholder="输入天数（正数=增加，负数=减少）"
+          value="{{days}}"
+          bindinput="onDaysInput"
+        />
+      </view>
+
+      <button class="calculate-button" bindtap="calculateDays">计算日期</button>
+    </view>
+
+    <view class="result-card" wx:if="{{result1}}">
+      <view class="result-header">
+        <text class="result-title">计算结果</text>
+      </view>
+      <view class="result-content">
+        <view class="result-item">
+          <text class="result-label">起始日期</text>
+          <text class="result-value">{{startDate1}}</text>
+        </view>
+        <view class="result-item">
+          <text class="result-label">加减天数</text>
+          <text class="result-value">{{days > 0 ? '+' : ''}}{{days}}天</text>
+        </view>
+        <view class="result-divider"></view>
+        <view class="result-item result-highlight">
+          <text class="result-label">结果日期</text>
+          <text class="result-value result-amount">{{result1}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Tab内容：月数加减 -->
+  <view class="tab-content" wx:if="{{currentTab === 1}}">
+    <view class="calculator-form">
+      <view class="form-item">
+        <text class="form-label">起始日期</text>
+        <picker class="form-picker" mode="date" value="{{startDate2}}" bindchange="onStartDate2Change">
+          <view class="picker-view">
+            {{startDate2 || '请选择日期'}}
+            <text class="picker-arrow">📅</text>
+          </view>
+        </picker>
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">月数</text>
+        <input
+          class="form-input"
+          type="digit"
+          placeholder="输入月数（正数=增加，负数=减少）"
+          value="{{months}}"
+          bindinput="onMonthsInput"
+        />
+      </view>
+
+      <button class="calculate-button" bindtap="calculateMonths">计算日期</button>
+    </view>
+
+    <view class="result-card" wx:if="{{result2}}">
+      <view class="result-header">
+        <text class="result-title">计算结果</text>
+      </view>
+      <view class="result-content">
+        <view class="result-item">
+          <text class="result-label">起始日期</text>
+          <text class="result-value">{{startDate2}}</text>
+        </view>
+        <view class="result-item">
+          <text class="result-label">加减月数</text>
+          <text class="result-value">{{months > 0 ? '+' : ''}}{{months}}个月</text>
+        </view>
+        <view class="result-divider"></view>
+        <view class="result-item result-highlight">
+          <text class="result-label">结果日期</text>
+          <text class="result-value result-amount">{{result2}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Tab内容：间隔计算 -->
+  <view class="tab-content" wx:if="{{currentTab === 2}}">
+    <view class="calculator-form">
+      <view class="form-item">
+        <text class="form-label">开始日期</text>
+        <picker class="form-picker" mode="date" value="{{startDate3}}" bindchange="onStartDate3Change">
+          <view class="picker-view">
+            {{startDate3 || '请选择日期'}}
+            <text class="picker-arrow">📅</text>
+          </view>
+        </picker>
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">结束日期</text>
+        <picker class="form-picker" mode="date" value="{{endDate3}}" bindchange="onEndDate3Change">
+          <view class="picker-view">
+            {{endDate3 || '请选择日期'}}
+            <text class="picker-arrow">📅</text>
+          </view>
+        </picker>
+      </view>
+
+      <button class="calculate-button" bindtap="calculateInterval">计算间隔</button>
+    </view>
+
+    <view class="result-card" wx:if="{{result3}}">
+      <view class="result-header">
+        <text class="result-title">计算结果</text>
+      </view>
+      <view class="result-content">
+        <view class="result-item">
+          <text class="result-label">开始日期</text>
+          <text class="result-value">{{startDate3}}</text>
+        </view>
+        <view class="result-item">
+          <text class="result-label">结束日期</text>
+          <text class="result-value">{{endDate3}}</text>
+        </view>
+        <view class="result-divider"></view>
+        <view class="result-item result-highlight">
+          <text class="result-label">间隔天数</text>
+          <text class="result-value result-amount">{{result3.days}}天</text>
+        </view>
+        <view class="result-item">
+          <text class="result-label">间隔月数</text>
+          <text class="result-value">{{result3.months}}个月</text>
+        </view>
+        <view class="result-item">
+          <text class="result-label">间隔年数</text>
+          <text class="result-value">{{result3.years}}年</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 常用法律期限提示 -->
+  <view class="tips-card">
+    <view class="tips-header">
+      <text class="tips-title">⏰ 常用法律期限</text>
+    </view>
+    <view class="tips-content">
+      <view class="tips-item">
+        <text class="tips-label">诉讼时效</text>
+        <text class="tips-value">3年</text>
+      </view>
+      <view class="tips-item">
+        <text class="tips-label">上诉期</text>
+        <text class="tips-value">15天</text>
+      </view>
+      <view class="tips-item">
+        <text class="tips-label">申请执行期</text>
+        <text class="tips-value">2年</text>
+      </view>
+      <view class="tips-item">
+        <text class="tips-label">不服仲裁裁决起诉期</text>
+        <text class="tips-value">15天</text>
+      </view>
+      <view class="tips-item">
+        <text class="tips-label">劳动仲裁申请期</text>
+        <text class="tips-value">1年</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 免责声明 -->
+  <view class="disclaimer">
+    <text class="disclaimer-text">⚠️ 日期计算仅供参考，具体以法律规定为准</text>
+  </view>
+</view>

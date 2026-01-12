@@ -1,0 +1,85 @@
+<!--pages/litigation-cost/litigation-cost.wxml-->
+<view class="container">
+  <!-- 标题 -->
+  <view class="page-header">
+    <text class="page-title">诉讼费用计算器</text>
+    <text class="page-subtitle">根据《诉讼费用交纳办法》计算</text>
+  </view>
+
+  <!-- 计算器表单 -->
+  <view class="calculator-form">
+    <!-- 案件类型 -->
+    <view class="form-item">
+      <text class="form-label">案件类型</text>
+      <picker class="form-picker" bindchange="onCaseTypeChange" value="{{caseTypeIndex}}" range="{{caseTypes}}">
+        <view class="picker-view">
+          {{caseTypes[caseTypeIndex]}}
+          <text class="picker-arrow">></text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 诉讼标的额 -->
+    <view class="form-item">
+      <text class="form-label">诉讼标的额(元)</text>
+      <input
+        class="form-input"
+        type="digit"
+        placeholder="请输入金额"
+        value="{{amount}}"
+        bindinput="onAmountInput"
+      />
+    </view>
+
+    <!-- 计算按钮 -->
+    <button class="calculate-button" bindtap="calculate">计算费用</button>
+  </view>
+
+  <!-- 计算结果 -->
+  <view class="result-card" wx:if="{{result !== null}}">
+    <view class="result-header">
+      <text class="result-title">计算结果</text>
+    </view>
+    <view class="result-content">
+      <view class="result-item">
+        <text class="result-label">案件类型</text>
+        <text class="result-value">{{caseTypes[caseTypeIndex]}}</text>
+      </view>
+      <view class="result-item">
+        <text class="result-label">诉讼标的额</text>
+        <text class="result-value">¥{{amount}}</text>
+      </view>
+      <view class="result-divider"></view>
+      <view class="result-item result-highlight">
+        <text class="result-label">应交费用</text>
+        <text class="result-value result-amount">¥{{result}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 费用说明 -->
+  <view class="info-card">
+    <view class="info-header">
+      <text class="info-title">💡 费用计算标准</text>
+    </view>
+    <view class="info-content">
+      <text class="info-text">财产案件根据诉讼请求的金额或者价额,按照下列比例分段累计交纳:</text>
+      <view class="info-list">
+        <text class="info-item">1. 不超过1万元的:交纳50元</text>
+        <text class="info-item">2. 超过1万至10万元:交纳2.5%</text>
+        <text class="info-item">3. 超过10万至20万元:交纳2.2%</text>
+        <text class="info-item">4. 超过20万至50万元:交纳2%</text>
+        <text class="info-item">5. 超过50万至100万元:交纳1.5%</text>
+        <text class="info-item">6. 超过100万至200万元:交纳1%</text>
+        <text class="info-item">7. 超过200万至500万元:交纳0.8%</text>
+        <text class="info-item">8. 超过500万至1000万元:交纳0.6%</text>
+        <text class="info-item">9. 超过1000万元:交纳0.5%</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 免责声明 -->
+  <view class="disclaimer">
+    <text class="disclaimer-text">⚠️ 本计算结果仅供参考,实际费用以法院核定为准</text>
+  </view>
+</view>
