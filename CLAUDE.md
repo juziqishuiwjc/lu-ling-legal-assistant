@@ -9,9 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **核心功能**：
 - 19个法律计算器工具（诉讼费用、利息计算、律师费等）
 - 律师介绍页面（含咨询收费标准）
-- 用户次数限制与付费会员系统
-- 设备绑定安全机制
-- 管理后台（密码保护）
+- 外部网站跳转功能
 
 **技术栈**：微信小程序原生框架 + JavaScript ES6+ + WXSS
 
@@ -36,41 +34,6 @@ C:\Users\橘子汽水\ClaudeCode\xiaochengxu
 - 使用Storage标签查看本地缓存数据
 - 使用AppData标签实时查看页面数据
 - 勾选"不校验合法域名"进行本地开发
-
-### 进入管理后台
-
-**方法1：隐藏入口（生产环境）**
-1. 进入用户中心页面（页面路径：`pages/user-center/user-center`）
-2. 滚动到页面底部
-3. 长按"庐陵吉成法答 v1.0.0"文字
-4. 输入密码：`wangjicheng2024`
-5. 验证成功后进入管理后台
-
-**方法2：调试模式（开发调试）**
-```json
-// 修改 app.json，将 pages/admin/admin 移到第一位
-"pages": [
-  "pages/admin/admin",
-  "pages/home/home",
-  ...
-]
-```
-
-### 配置API Key
-
-**GLM-4 API配置位置**：`app.js:258`
-
-```javascript
-glmConfig: {
-  apiKey: 'YOUR_API_KEY_HERE', // 智谱AI API Key
-  baseUrl: 'https://open.bigmodel.cn/api/paas/v4/chat/completions'
-}
-```
-
-**重要**：
-- 不要将真实API Key提交到公开代码仓库
-- API Key需要在微信小程序后台配置服务器域名白名单
-- 确保账户余额充足，避免429错误
 
 ---
 
@@ -116,77 +79,15 @@ glmConfig: {
 
 | 页面 | 路径 | 功能 |
 |------|------|------|
-| 用户中心 | pages/user-center/user-center | 用户信息管理、会员状态查看 |
-| 管理后台 | pages/admin/admin | 激活用户会员（隐藏入口） |
-| 会员升级 | pages/upgrade/upgrade | 会员付费页面 |
 | 外链跳转 | pages/webview/webview | 加载外部H5页面 |
 
 ---
 
 ## 核心架构
 
-### 用户管理系统（app.js）
+### 应用配置（app.js）
 
-**设备ID绑定机制**：
-- 每个设备生成唯一UUID（`generateUUID()`）
-- 用户数据绑定到设备ID，防止账号共享
-- 设备ID不匹配时自动清空用户数据（`app.js:63-94`）
-
-**用户数据结构**：
-```javascript
-{
-  phone: '',           // 手机号后8位（用户唯一标识）
-  deviceId: '',        // 设备ID（安全绑定）
-  avatar: '',          // 用户头像
-  isRegistered: false, // 是否已注册
-  isPaid: false,       // 是否已付费
-  registerDate: '',    // 注册日期
-  paidDate: '',        // 付费日期
-  planType: '',        // 会员类型：monthly/yearly/trial
-  expireDate: '',      // 到期日期
-  dailyCount: 0,       // 今日已使用次数
-  lastDate: '',        // 上次使用日期
-  totalQuestions: 0    // 总提问次数
-}
-```
-
-**核心检查逻辑**（app.js启动时自动执行）：
-1. `checkAndResetDailyCount()` - 检查是否新的一天，重置计数
-2. `checkUserActivation()` - 检查用户是否已被管理员激活
-3. `checkMembershipExpire()` - 检查会员是否过期
-
-### 管理后台系统
-
-**数据存储**（本地存储）：
-```javascript
-wx.setStorageSync('user_activations', [
-  {
-    phone: '12345678',        // 手机号后8位
-    planType: 'monthly',      // 会员类型
-    trialDays: 7,            // 试用天数（仅试用类型）
-    activateTime: '2026-01-03' // 激活时间
-  }
-])
-```
-
-**核心功能**（`pages/admin/admin.js`）：
-1. 激活用户会员（输入手机号后8位）
-2. 设置会员类型（月付/年付/试用）
-3. 设置试用天数
-4. 查看已激活用户列表
-5. 搜索和过滤用户
-6. 删除激活记录
-
-**安全机制**：
-- 隐藏入口：长按用户中心底部版本号
-- 密码保护：`wangjicheng2024`（`pages/user-center/user-center.js:252`）
-
-**用户激活流程**（`app.js:157-212`）：
-1. 用户打开小程序，系统自动检查激活列表
-2. 根据手机号后8位查找激活记录
-3. 找到记录 → 激活会员，设置到期日期
-4. 未找到记录 → 如果是会员则取消资格
-5. 每次启动自动检查，确保状态同步
+应用初始化和全局数据管理，代码极其精简，仅包含必要的启动逻辑。
 
 ### 外链跳转（webview）
 
@@ -199,41 +100,12 @@ wx.setStorageSync('user_activations', [
 - 路径：微信小程序后台 → 开发 → 开发设置 → 业务域名
 - 需添加：`abc.juziqishui.top`
 
-### API调用系统（utils/api.js）
-
-**GLM-4.6V-Flash模型配置**：
-- 模型：`glm-4.6v-flash`
-- 超时时间：120秒（适应长回复）
-- 温度：0.3（降低随机性）
-- Top-P：0.7（降低采样范围）
-
-**会员差异化配置**（`utils/api.js:28`）：
-```javascript
-// 非会员：2000 tokens，会员：6000 tokens（3倍长度）
-const maxTokens = isPaid ? 6000 : 2000
-```
-
-**系统提示词**（`utils/api.js:162`）：
-```
-你是王吉成律师AI助手。基于中国法律解答，用"王律师认为"。
-结尾：联系王吉成律师 微信号:lawyer_wang_zz
-免责：仅供参考，重大问题请线下咨询。
-```
-
 ---
 
 ## 重要配置位置
 
 | 功能 | 文件路径 | 关键行号 |
 |------|---------|---------|
-| API Key配置 | app.js | 258 |
-| 设备ID生成 | app.js | 25-31 |
-| 用户激活检查 | app.js | 157-212 |
-| 会员到期检查 | app.js | 236-253 |
-| 次数限制检查 | app.js | 136-155 |
-| 系统提示词 | utils/api.js | 162-166 |
-| 管理后台密码 | pages/user-center/user-center.js | 252 |
-| 隐藏入口 | pages/user-center/user-center.wxml | 100 |
 | 主页功能列表 | pages/home/home.js | 4-145 |
 | 律师网站跳转 | pages/index/index.js | 24-45 |
 
@@ -241,19 +113,13 @@ const maxTokens = isPaid ? 6000 : 2000
 
 ## 部署配置
 
-### 服务器域名白名单
+### 业务域名（用于webview跳转）
 
-**必须配置的域名**：
-```
-https://open.bigmodel.cn    // GLM-4 API
-```
-
-**业务域名**（用于webview跳转）：
 ```
 https://abc.juziqishui.top  // 律师网站
 ```
 
-**配置位置**：微信小程序后台 → 开发 → 开发设置
+**配置位置**：微信小程序后台 → 开发 → 开发设置 → 业务域名
 
 ### 图片资源
 

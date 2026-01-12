@@ -20,9 +20,6 @@
     "pages/traffic-accident/traffic-accident",
     "pages/bankruptcy-fee/bankruptcy-fee",
     "pages/civil-cause/civil-cause",
-    "pages/upgrade/upgrade",
-    "pages/user-center/user-center",
-    "pages/admin/admin",
     "pages/webview/webview"
   ],
   "window": {
