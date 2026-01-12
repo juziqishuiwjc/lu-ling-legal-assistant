@@ -7,16 +7,31 @@
 
   <!-- 主内容区域 -->
   <scroll-view class="main-content" scroll-y>
-    <!-- 功能模块网格 -->
+    <!-- 功能模块网格（排除律师介绍） -->
     <view class="function-grid">
       <block wx:for="{{functions}}" wx:key="id">
-        <view class="function-item" bindtap="handleFunctionTap" data-id="{{item.id}}">
+        <view wx:if="{{item.id !== 'lawyer-intro'}}"
+              class="function-item"
+              bindtap="handleFunctionTap"
+              data-id="{{item.id}}">
           <view class="function-icon-wrapper" style="background: {{item.color}}">
             <text class="function-icon">{{item.icon}}</text>
           </view>
           <text class="function-name">{{item.name}}</text>
         </view>
       </block>
+    </view>
+
+    <!-- 王吉成律师介绍 - 长条按钮 -->
+    <view class="lawyer-intro-banner" bindtap="handleFunctionTap" data-id="lawyer-intro">
+      <view class="intro-icon-wrapper">
+        <text class="intro-icon">⚖️</text>
+      </view>
+      <view class="intro-content">
+        <text class="intro-title">王吉成律师介绍</text>
+        <text class="intro-desc">刑事辩护 · 民商事争议 · 江西吉泰律师事务所</text>
+      </view>
+      <text class="intro-arrow">›</text>
     </view>
   </scroll-view>
 

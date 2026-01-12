@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/home/home",
+    "pages/ai-chat/ai-chat",
     "pages/index/index",
     "pages/litigation-cost/litigation-cost",
     "pages/delay-interest/delay-interest",
@@ -30,5 +31,6 @@
     "backgroundColor": "#f5f5f5"
   },
   "sitemapLocation": "sitemap.json",
-  "style": "v2"
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents"
 }

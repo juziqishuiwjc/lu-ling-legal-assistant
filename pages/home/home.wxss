@@ -22,26 +22,6 @@
   color: #2c3e50;
 }
 
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 8rpx;
-  padding: 12rpx 24rpx;
-  background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
-  border-radius: 30rpx;
-  box-shadow: 0 2rpx 8rpx rgba(74, 144, 226, 0.3);
-}
-
-.nav-icon {
-  font-size: 28rpx;
-}
-
-.nav-text {
-  font-size: 28rpx;
-  color: white;
-  font-weight: bold;
-}
-
 /* 主内容区域 */
 .main-content {
   flex: 1;
@@ -101,6 +81,66 @@
   overflow: hidden;
   text-overflow: ellipsis;
   word-break: break-all;
+}
+
+/* 王吉成律师介绍 - 长条按钮 */
+.lawyer-intro-banner {
+  display: flex;
+  align-items: center;
+  margin-top: 30rpx;
+  padding: 30rpx;
+  background: white;
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+  transition: all 0.3s;
+}
+
+.lawyer-intro-banner:active {
+  transform: scale(0.98);
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.12);
+}
+
+.intro-icon-wrapper {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 16rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 24rpx;
+  box-shadow: 0 4rpx 12rpx rgba(102, 126, 234, 0.25);
+  flex-shrink: 0;
+}
+
+.intro-icon {
+  font-size: 52rpx;
+}
+
+.intro-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.intro-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.intro-desc {
+  font-size: 24rpx;
+  color: #666;
+  line-height: 1.4;
+}
+
+.intro-arrow {
+  font-size: 48rpx;
+  color: #ccc;
+  font-weight: 300;
+  margin-left: 10rpx;
 }
 
 /* 版权信息 */

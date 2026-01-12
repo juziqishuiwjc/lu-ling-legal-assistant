@@ -3,8 +3,15 @@ Page({
   data: {
     functions: [
       {
+        id: 'ai-assistant',
+        name: '王律师助手',
+        icon: '🤖',
+        color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        page: '/pages/ai-chat/ai-chat'
+      },
+      {
         id: 'lawyer-intro',
-        name: '律师介绍',
+        name: '王吉成律师介绍',
         icon: '⚖️',
         color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         page: '/pages/index/index'
